@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kah Global — Invoice System</title>
+<style>
+  :root{
+    --ink:#1c2430; --paper:#ffffff; --bg:#eef1f4;
+    --brand-green:#1e7a4e; --brand-pink:#c2185b;
+    --line:#d7dce2; --muted:#69737f; --danger:#b3261e;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);}
+
+  /* ============ APP LAYOUT ============ */
+  .app{display:flex;min-height:100vh;}
+  .panel{width:440px;min-width:440px;background:var(--paper);border-right:1px solid var(--line);
+    padding:18px 20px 60px;height:100vh;overflow-y:auto;}
+  .stage{flex:1;padding:26px;display:flex;flex-direction:column;align-items:center;height:100vh;overflow-y:auto;}
+
+  .brandbar{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .brandbar .dot{width:34px;height:34px;border-radius:50%;flex:none;overflow:hidden;
+    background:conic-gradient(var(--brand-pink) 0 50%, var(--brand-green) 50% 100%);}
+  .brandbar .dot img{width:100%;height:100%;object-fit:contain;background:#fff;}
+  .brandbar h1{font-size:16px;margin:0;letter-spacing:.3px;}
+  .brandbar small{display:block;color:var(--muted);font-weight:400;}
+
+  .tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:16px;}
+  .tab{border:none;background:none;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;
+    color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;}
+  .tab.active{color:var(--brand-green);border-bottom-color:var(--brand-green);}
+  .tabpage{display:none;}
+  .tabpage.active{display:block;}
+
+  fieldset{border:1px solid var(--line);border-radius:8px;margin:0 0 16px;padding:12px 14px 14px;}
+  legend{font-size:11px;font-weight:600;letter-spacing:.8px;color:var(--brand-green);text-transform:uppercase;padding:0 6px;}
+  label{display:block;font-size:12px;color:var(--muted);margin:8px 0 3px;}
+  input[type=text],input[type=date],input[type=number],select,textarea{
+    width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;
+    font-size:13px;font-family:inherit;color:var(--ink);background:#fff;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--brand-green);outline-offset:0;border-color:var(--brand-green);}
+  .row2{display:flex;gap:10px;} .row2>div{flex:1;}
+
+  .item-row{display:grid;grid-template-columns:1fr 54px 70px 62px 26px;gap:6px;margin-bottom:6px;align-items:center;}
+  .item-head{display:grid;grid-template-columns:1fr 54px 70px 62px 26px;gap:6px;font-size:10px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px;}
+  .del-btn{background:none;border:none;color:var(--danger);font-size:16px;cursor:pointer;padding:2px;line-height:1;}
+  .add-btn{margin-top:6px;background:#fff;border:1px dashed var(--brand-green);color:var(--brand-green);
+    border-radius:6px;padding:7px 12px;font-size:13px;cursor:pointer;width:100%;}
+  .add-btn:hover{background:#f1faf5;}
+
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .btn{border:none;border-radius:7px;padding:10px 16px;font-size:13.5px;cursor:pointer;font-weight:600;}
+  .btn.primary{background:var(--brand-green);color:#fff;} .btn.primary:hover{background:#166341;}
+  .btn.secondary{background:#fff;border:1px solid var(--line);color:var(--ink);} .btn.secondary:hover{background:#f5f7f9;}
+  .btn.pink{background:var(--brand-pink);color:#fff;} .btn.pink:hover{background:#a3134c;}
+  .btn.sm{padding:5px 10px;font-size:12px;}
+
+  .list-item{display:flex;justify-content:space-between;align-items:center;gap:6px;
+    padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-bottom:6px;font-size:12.5px;background:#fafbfc;}
+  .list-item .nm{font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .list-item .sub{font-size:11px;color:var(--muted);font-weight:400;}
+  .list-item b{color:var(--brand-green);}
+  .mini{background:none;border:none;cursor:pointer;font-size:12px;text-decoration:underline;padding:0 3px;}
+  .mini.edit{color:var(--brand-green);} .mini.use{color:var(--brand-pink);} .mini.del{color:var(--danger);}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .statusmsg{font-size:12px;margin-top:8px;color:var(--brand-green);min-height:16px;}
+
+  /* ============ INVOICE (A4) ============ */
+  .sheet-wrap{box-shadow:0 6px 24px rgba(20,30,45,.16);margin-bottom:40px;}
+  .sheet{width:210mm;min-height:297mm;background:#fff;color:#000;padding:12mm 12mm 14mm;
+    font-family:"Times New Roman",Times,serif;font-size:12.5px;position:relative;display:flex;flex-direction:column;}
+
+  .inv-header{text-align:center;position:relative;margin-bottom:6mm;}
+  .inv-header .logo{position:absolute;left:6mm;top:2mm;width:26mm;height:26mm;border-radius:50%;
+    background:conic-gradient(var(--brand-pink) 0 50%, var(--brand-green) 50% 100%);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .inv-header .logo img{width:100%;height:100%;object-fit:contain;background:#fff;}
+  .inv-header h2{font-size:21px;margin:0;font-weight:bold;letter-spacing:.5px;}
+  .inv-header .reg{font-size:10.5px;}
+  .inv-header .addr{font-size:12.5px;line-height:1.45;white-space:pre-line;}
+
+  .inv-meta{display:flex;justify-content:space-between;margin-bottom:8mm;}
+  .billto{width:58%;} .billto .lbl{font-weight:bold;font-size:12px;}
+  .billto .name{font-weight:bold;} .billto div{line-height:1.5;}
+  .invbox{width:38%;}
+  .invbox .title{font-size:17px;font-weight:bold;letter-spacing:6px;margin-bottom:3mm;}
+  .invbox table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .invbox td{padding:1.2px 0;vertical-align:top;}
+  .invbox td:first-child{font-weight:bold;width:34mm;}
+
+  .items{width:100%;border-collapse:collapse;}
+  .items thead th{border-top:2px solid #000;border-bottom:1.5px solid #000;
+    font-size:12px;padding:4px 4px;text-align:left;font-weight:bold;}
+  .items thead th.r{text-align:right;}
+  .items .rmrow td{text-align:right;font-size:11.5px;padding:2px 4px 6px;border-bottom:1px solid #000;}
+  .items tbody td{padding:9px 4px;font-size:12.5px;vertical-align:top;}
+  .items tbody td.r{text-align:right;} .items tbody td.c{text-align:center;}
+  .items col.no{width:9mm;} .items col.qty{width:20mm;}
+  .items col.price{width:24mm;} .items col.disc{width:22mm;} .items col.amt{width:26mm;}
+
+  .inv-bottom{margin-top:auto;}
+  .totals-line{display:flex;justify-content:space-between;align-items:flex-start;
+    border-top:1.5px solid #000;padding-top:3mm;}
+  .words{padding-top:2mm;font-size:12.5px;display:flex;gap:14mm;}
+  .words b{white-space:nowrap;} .words .w{text-transform:uppercase;}
+  .totals{border:1.5px solid #000;width:82mm;border-collapse:collapse;font-size:12.5px;}
+  .totals td{padding:3.5px 8px;}
+  .totals td:first-child{text-align:right;font-weight:bold;border-right:1.5px solid #000;width:52mm;}
+  .totals td:last-child{text-align:right;}
+  .totals tr.sep td{border-top:1.5px solid #000;}
+
+  .invnote{border:1px solid #000;padding:2.5mm 3.5mm;margin-bottom:4mm;font-size:12px;
+    line-height:1.5;white-space:pre-line;width:110mm;}
+  .invnote::before{content:"Note :";display:block;font-weight:bold;margin-bottom:1mm;}
+
+  .sigs{display:flex;justify-content:space-between;margin-top:22mm;font-size:12px;}
+  .sig{width:44%;text-align:center;} .sig .line{border-top:1px solid #000;padding-top:2mm;}
+
+  @page{size:A4;margin:0;}
+  @media print{
+    body{background:#fff;}
+    .panel{display:none !important;}
+    .stage{padding:0;height:auto;overflow:visible;}
+    .sheet-wrap{box-shadow:none;margin:0;}
+    .sheet{width:210mm;min-height:297mm;}
+  }
+  @media (max-width:900px){
+    .app{flex-direction:column;}
+    .panel{width:100%;min-width:0;height:auto;border-right:none;border-bottom:1px solid var(--line);}
+    .stage{height:auto;}
+    .sheet{transform:scale(.45);transform-origin:top left;}
+    .sheet-wrap{width:calc(210mm * .45);height:calc(297mm * .45);overflow:hidden;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= LEFT PANEL ================= -->
+  <div class="panel">
+    <div class="brandbar">
+      <div class="dot" id="miniLogo"></div>
+      <h1 id="miniName">KAH GLOBAL SDN BHD<br><small id="miniReg">1084190-X</small></h1>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="invoice" onclick="showTab('invoice')">Invoice</button>
+      <button class="tab" data-tab="customers" onclick="showTab('customers')">Customers</button>
+      <button class="tab" data-tab="company" onclick="showTab('company')">Company Settings</button>
+    </div>
+
+    <!-- ======= TAB: INVOICE ======= -->
+    <div class="tabpage active" id="tab-invoice">
+      <fieldset>
+        <legend>Invoice details</legend>
+        <div class="row2">
+          <div><label>Invoice No.</label><input type="text" id="f_no" value="INV000073"></div>
+          <div><label>Date</label><input type="date" id="f_date"></div>
+        </div>
+        <div class="row2">
+          <div><label>P/O Ref.</label><input type="text" id="f_po" placeholder="Optional"></div>
+          <div><label>Terms</label>
+            <select id="f_terms">
+              <option>C.O.D.</option><option>7 Days</option><option>14 Days</option>
+              <option>30 Days</option><option>60 Days</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Bill to</legend>
+        <label>Pick from customer list</label>
+        <select id="custPick" onchange="pickCustomer(this.value)">
+          <option value="">— Select a customer —</option>
+        </select>
+        <label>Customer name</label>
+        <input type="text" id="f_cust" placeholder="Or type a new customer here">
+        <label>Address (one line per row)</label>
+        <textarea id="f_addr" rows="3" placeholder="SEMENYIH&#10;43000&#10;KAJANG"></textarea>
+        <div class="row2">
+          <div><label>Attention</label><input type="text" id="f_attn" placeholder="e.g. CR RAGU"></div>
+          <div><label>Tel</label><input type="text" id="f_tel" placeholder="e.g. 0166318603"></div>
+        </div>
+        <div class="hint">New customer? Manage the full list under the <b>Customers</b> tab.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Items</legend>
+        <div class="item-head"><span>Description</span><span>Qty</span><span>Price</span><span>Disc</span><span></span></div>
+        <div id="itemsEditor"></div>
+        <button class="add-btn" onclick="addItem()">+ Add item</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Adjustments</legend>
+        <div class="row2">
+          <div><label>Rounding Adj. (RM)</label><input type="number" id="f_round" step="0.01" value="0"></div>
+          <div><label>Deposit (RM)</label><input type="number" id="f_dep" step="0.01" value="0"></div>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button class="btn primary" onclick="saveInvoice()">Save invoice</button>
+        <button class="btn pink" onclick="window.print()">Print / Save PDF</button>
+        <button class="btn secondary" onclick="newInvoice()">New invoice</button>
+      </div>
+      <div class="statusmsg" id="statusMsg"></div>
+
+      <fieldset style="margin-top:16px;">
+        <legend>Saved invoices</legend>
+        <div id="historyList"><div class="hint">No saved invoices yet.</div></div>
+      </fieldset>
+
+      <div class="hint">To get a PDF: click <b>Print / Save PDF</b>, then choose "Save as PDF" as the printer. Output is A4, matching your existing invoice format.</div>
+    </div>
+
+    <!-- ======= TAB: CUSTOMERS (ADMIN) ======= -->
+    <div class="tabpage" id="tab-customers">
+      <fieldset>
+        <legend>Add / edit customer</legend>
+        <label>Customer name</label>
+        <input type="text" id="c_name" placeholder="e.g. Sree Vinayaka Indian Traditional Music Resources">
+        <label>Address (one line per row)</label>
+        <textarea id="c_addr" rows="3" placeholder="SEMENYIH&#10;43000&#10;KAJANG"></textarea>
+        <div class="row2">
+          <div><label>Attention (contact person)</label><input type="text" id="c_attn" placeholder="e.g. CR RAGU"></div>
+          <div><label>Phone number</label><input type="text" id="c_tel" placeholder="e.g. 0166318603"></div>
+        </div>
+        <div class="actions" style="margin-top:10px;">
+          <button class="btn primary" onclick="adminSaveCustomer()">Save customer</button>
+          <button class="btn secondary" onclick="adminClearCustomerForm()">Clear form</button>
+        </div>
+        <div class="statusmsg" id="custMsg"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Customer list</legend>
+        <input type="text" id="custSearch" placeholder="Search customers…" oninput="renderCustomerAdminList()" style="margin-bottom:8px;">
+        <div id="custAdminList"><div class="hint">No customers yet. Add your first one above.</div></div>
+      </fieldset>
+      <div class="hint"><b>Use</b> puts the customer straight onto the current invoice. <b>Edit</b> loads them into the form above. Saving with the same name updates their details.</div>
+    </div>
+
+    <!-- ======= TAB: COMPANY SETTINGS (ADMIN) ======= -->
+    <div class="tabpage" id="tab-company">
+      <fieldset>
+        <legend>Company details</legend>
+        <label>Company name</label>
+        <input type="text" id="co_name" value="KAH GLOBAL SDN BHD">
+        <label>Registration no.</label>
+        <input type="text" id="co_reg" value="1084190-X">
+        <label>Address (one line per row)</label>
+        <textarea id="co_addr" rows="3">NO.14 A, JALAN BUNGA MELUR 3
+TAMAN SURIA JAYA,43200, CHERAS
+KUALA LUMPUR</textarea>
+        <label>Tel line</label>
+        <input type="text" id="co_tel" value="Tel No. : 014-2785012 / 03-91083269">
+      </fieldset>
+
+      <fieldset>
+        <legend>Logo</legend>
+        <input type="file" id="f_logo" accept="image/*" style="font-size:12px;">
+        <div class="actions" style="margin-top:10px;">
+          <button class="btn secondary sm" onclick="removeLogo()">Remove logo</button>
+        </div>
+        <div class="hint">Uploaded once, remembered forever. Shows top-left of every invoice.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Payment note (shows on every invoice)</legend>
+        <textarea id="co_note" rows="3" placeholder="e.g.&#10;Please make payment to :&#10;MAYBANK 5623 1234 5678 — KAH GLOBAL SDN BHD"></textarea>
+        <div class="hint">Bank account number, payment instructions, or any note. Printed at the bottom of every invoice. Leave empty to hide.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Invoice numbering</legend>
+        <label>Next invoice number</label>
+        <input type="number" id="co_next" min="1" value="73">
+        <div class="hint">e.g. 73 &rarr; INV000073. Auto-increments each time you save an invoice.</div>
+      </fieldset>
+
+      <div class="actions">
+        <button class="btn primary" onclick="saveCompany()">Save company settings</button>
+      </div>
+      <div class="statusmsg" id="coMsg"></div>
+    </div>
+  </div>
+
+  <!-- ================= INVOICE SHEET ================= -->
+  <div class="stage">
+    <div class="sheet-wrap"><div class="sheet" id="sheet">
+
+      <div class="inv-header">
+        <div class="logo" id="logoBox"></div>
+        <h2 id="h_name">KAH GLOBAL SDN BHD</h2>
+        <div class="reg" id="h_reg">1084190-X</div>
+        <div class="addr" id="h_addr">NO.14 A, JALAN BUNGA MELUR 3
+TAMAN SURIA JAYA,43200, CHERAS
+KUALA LUMPUR
+Tel No. : 014-2785012 / 03-91083269</div>
+      </div>
+
+      <div class="inv-meta">
+        <div class="billto">
+          <div class="lbl">Bill To #</div>
+          <div class="name" id="p_cust">&nbsp;</div>
+          <div id="p_addr"></div>
+          <div style="margin-top:5mm;" id="p_attn"></div>
+          <div id="p_tel"></div>
+        </div>
+        <div class="invbox">
+          <div class="title">I N V O I C E</div>
+          <table>
+            <tr><td>No. :</td><td id="p_no"></td></tr>
+            <tr><td>Date :</td><td id="p_date"></td></tr>
+            <tr><td>P/O Ref. :</td><td id="p_po"></td></tr>
+            <tr><td>Terms :</td><td id="p_terms"></td></tr>
+            <tr><td style="padding-top:5mm;">Page :</td><td style="padding-top:5mm;">1</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <table class="items">
+        <colgroup><col class="no"><col><col class="qty"><col class="price"><col class="disc"><col class="amt"></colgroup>
+        <thead>
+          <tr>
+            <th>No.</th><th>Description</th><th class="r">Qty</th>
+            <th class="r">Price</th><th class="r">Discount</th><th class="r">Amount</th>
+          </tr>
+          <tr class="rmrow"><td colspan="6">RM</td></tr>
+        </thead>
+        <tbody id="p_items"></tbody>
+      </table>
+
+      <div class="inv-bottom">
+        <div class="invnote" id="h_note" style="display:none;"></div>
+        <div class="totals-line">
+          <div class="words"><b>RINGGIT M'SIA</b><span class="w" id="p_words"></span></div>
+          <table class="totals">
+            <tr><td>Subtotal</td><td id="t_sub">0.00</td></tr>
+            <tr><td>Discount</td><td id="t_disc">0.00</td></tr>
+            <tr class="sep"><td>Total</td><td id="t_total">0.00</td></tr>
+            <tr><td>Rounding Adj.</td><td id="t_round">0.00</td></tr>
+            <tr class="sep"><td>Deposit</td><td id="t_dep">0.00</td></tr>
+            <tr><td>Grand Total</td><td id="t_grand">0.00</td></tr>
+          </table>
+        </div>
+        <div class="sigs">
+          <div class="sig"><div class="line" id="h_sig">FOR KAH GLOBAL SDN BHD</div></div>
+          <div class="sig"><div class="line">CUSTOMER SIGNATURE &amp; STAMP</div></div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script>
+/* ---------- storage adapter ----------
+   Inside Claude artifacts -> uses window.storage (built in).
+   On GitHub Pages / any normal browser -> falls back to localStorage,
+   so all data (customers, invoices, company settings, logo) is saved
+   in the browser with no database needed. */
+if(!window.storage){
+  window.storage={
+    async get(k){const v=localStorage.getItem(k);if(v===null)throw new Error("key not found: "+k);return{key:k,value:v};},
+    async set(k,v){localStorage.setItem(k,v);return{key:k,value:v};},
+    async delete(k){if(localStorage.getItem(k)===null)throw new Error("key not found: "+k);localStorage.removeItem(k);return{key:k,deleted:true};},
+    async list(p){const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(!p||k.startsWith(p))keys.push(k);}return{keys:keys,prefix:p};}
+  };
+}
+
+/* ---------- state ---------- */
+let items=[{desc:"",qty:1,price:0,disc:0}];
+let customers={}; // key -> {name,addr,attn,tel}
+
+/* ---------- tabs ---------- */
+function showTab(name){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===name));
+  document.querySelectorAll(".tabpage").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
+}
+
+/* ---------- number to words ---------- */
+const ONES=["","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN","SEVENTEEN","EIGHTEEN","NINETEEN"];
+const TENS=["","","TWENTY","THIRTY","FORTY","FIFTY","SIXTY","SEVENTY","EIGHTY","NINETY"];
+function threeDigits(n){
+  let s="";
+  if(n>=100){s+=ONES[Math.floor(n/100)]+" HUNDRED";n%=100;if(n)s+=" ";}
+  if(n>=20){s+=TENS[Math.floor(n/10)];n%=10;if(n)s+=" "+ONES[n];}
+  else if(n>0){s+=ONES[n];}
+  return s;
+}
+function numToWords(n){
+  if(n===0)return "ZERO";
+  let parts=[],units=[[1000000,"MILLION"],[1000,"THOUSAND"],[1,""]];
+  for(const [v,name] of units){
+    if(n>=v){const q=Math.floor(n/v);n%=v;let w=threeDigits(q);if(name)w+=" "+name;parts.push(w);}
+  }
+  return parts.join(" ");
+}
+function amountWords(a){
+  const rm=Math.floor(a),sen=Math.round((a-rm)*100);
+  let w=numToWords(rm);
+  if(sen>0)w+=" AND SEN "+numToWords(sen);
+  return w+" ONLY";
+}
+
+/* ---------- helpers ---------- */
+function fmt(n){return n.toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function val(id){return document.getElementById(id).value;}
+function setVal(id,v){document.getElementById(id).value=v;}
+function escAttr(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function flash(id,msg){const el=document.getElementById(id);el.textContent=msg;setTimeout(()=>{if(el.textContent===msg)el.textContent="";},4000);}
+function status(m){flash("statusMsg",m);}
+
+/* ---------- items editor ---------- */
+function renderEditor(){
+  const box=document.getElementById("itemsEditor");box.innerHTML="";
+  items.forEach((it,i)=>{
+    const row=document.createElement("div");row.className="item-row";
+    row.innerHTML=
+      '<input type="text" value="'+escAttr(it.desc)+'" placeholder="Item description" oninput="upd('+i+',\'desc\',this.value)">'+
+      '<input type="number" value="'+it.qty+'" min="0" oninput="upd('+i+',\'qty\',this.value)">'+
+      '<input type="number" value="'+it.price+'" step="0.01" min="0" oninput="upd('+i+',\'price\',this.value)">'+
+      '<input type="number" value="'+it.disc+'" step="0.01" min="0" oninput="upd('+i+',\'disc\',this.value)">'+
+      '<button class="del-btn" title="Remove" onclick="delItem('+i+')">&times;</button>';
+    box.appendChild(row);
+  });
+}
+function upd(i,k,v){items[i][k]=(k==="desc")?v:parseFloat(v)||0;renderInvoice();}
+function addItem(){items.push({desc:"",qty:1,price:0,disc:0});renderEditor();renderInvoice();}
+function delItem(i){items.splice(i,1);if(!items.length)items.push({desc:"",qty:1,price:0,disc:0});renderEditor();renderInvoice();}
+
+/* ---------- invoice render ---------- */
+function renderInvoice(){
+  document.getElementById("p_cust").innerHTML=escHtml(val("f_cust"))||"&nbsp;";
+  document.getElementById("p_addr").innerHTML=val("f_addr").split("\n").map(escHtml).join("<br>");
+  document.getElementById("p_attn").textContent=val("f_attn")?("Attention : "+val("f_attn")):"";
+  document.getElementById("p_tel").textContent=val("f_tel")?("Tel : "+val("f_tel")):"";
+  document.getElementById("p_no").textContent=val("f_no");
+  document.getElementById("p_po").textContent=val("f_po");
+  document.getElementById("p_terms").textContent=val("f_terms");
+  const d=val("f_date");
+  document.getElementById("p_date").textContent=d?d.split("-").reverse().join("/"):"";
+
+  const tb=document.getElementById("p_items");tb.innerHTML="";
+  let sub=0,discTotal=0;
+  items.forEach((it,i)=>{
+    if(!it.desc&&!it.price)return;
+    const line=it.qty*it.price,amt=line-it.disc;
+    sub+=line;discTotal+=it.disc;
+    const tr=document.createElement("tr");
+    tr.innerHTML='<td class="c">'+(i+1)+'</td><td>'+escHtml(it.desc)+'</td>'+
+      '<td class="r">'+it.qty+'</td><td class="r">'+fmt(it.price)+'</td>'+
+      '<td class="r">'+(it.disc?fmt(it.disc):"")+'</td><td class="r">'+fmt(amt)+'</td>';
+    tb.appendChild(tr);
+  });
+  const round=parseFloat(val("f_round"))||0,dep=parseFloat(val("f_dep"))||0;
+  const total=sub-discTotal,grand=total+round-dep;
+  document.getElementById("t_sub").textContent=fmt(sub);
+  document.getElementById("t_disc").textContent=fmt(discTotal);
+  document.getElementById("t_total").textContent=fmt(total);
+  document.getElementById("t_round").textContent=fmt(round);
+  document.getElementById("t_dep").textContent=fmt(dep);
+  document.getElementById("t_grand").textContent=fmt(grand);
+  document.getElementById("p_words").textContent=amountWords(Math.max(grand,0));
+}
+
+/* ---------- company settings ---------- */
+function applyCompany(c){
+  document.getElementById("h_name").textContent=c.name;
+  document.getElementById("h_reg").textContent=c.reg;
+  document.getElementById("h_addr").textContent=c.addr+(c.tel?"\n"+c.tel:"");
+  document.getElementById("h_sig").textContent="FOR "+c.name.toUpperCase();
+  document.getElementById("miniName").childNodes[0].textContent=c.name;
+  document.getElementById("miniReg").textContent=c.reg;
+  const noteEl=document.getElementById("h_note");
+  const note=(c.note||"").trim();
+  noteEl.textContent=note;
+  noteEl.style.display=note?"block":"none";
+  document.title=c.name+" — Invoice System";
+}
+async function saveCompany(){
+  const c={name:val("co_name").trim()||"MY COMPANY",reg:val("co_reg").trim(),
+           addr:val("co_addr"),tel:val("co_tel").trim(),note:val("co_note")};
+  applyCompany(c);
+  try{
+    await window.storage.set("meta:company",JSON.stringify(c));
+    const next=parseInt(val("co_next"),10);
+    if(!isNaN(next)&&next>0){
+      await window.storage.set("meta:nextnum",String(next));
+      setVal("f_no","INV"+String(next).padStart(6,"0"));
+      renderInvoice();
+    }
+    flash("coMsg","Company settings saved ✓");
+  }catch(e){flash("coMsg","Could not save — try again.");}
+}
+async function loadCompany(){
+  try{
+    const r=await window.storage.get("meta:company");
+    if(r){
+      const c=JSON.parse(r.value);
+      setVal("co_name",c.name);setVal("co_reg",c.reg);
+      setVal("co_addr",c.addr);setVal("co_tel",c.tel);
+      setVal("co_note",c.note||"");
+      applyCompany(c);
+    }
+  }catch(e){}
+}
+
+/* ---------- logo ---------- */
+document.getElementById("f_logo").addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=async ev=>{
+    setLogo(ev.target.result);
+    try{await window.storage.set("meta:logo",ev.target.result);flash("coMsg","Logo saved ✓");}
+    catch(err){flash("coMsg","Logo shown but too large to save permanently.");}
+  };
+  r.readAsDataURL(file);
+});
+function setLogo(dataUrl){
+  document.getElementById("logoBox").innerHTML='<img src="'+dataUrl+'" alt="logo">';
+  document.getElementById("miniLogo").innerHTML='<img src="'+dataUrl+'" alt="">';
+}
+async function removeLogo(){
+  document.getElementById("logoBox").innerHTML="";
+  document.getElementById("miniLogo").innerHTML="";
+  try{await window.storage.delete("meta:logo");flash("coMsg","Logo removed.");}catch(e){}
+}
+
+/* ---------- customers (admin) ---------- */
+function custKey(name){return "cust:"+name.trim().toUpperCase().replace(/\s+/g,"_").replace(/[\/\\'"]/g,"");}
+
+async function adminSaveCustomer(){
+  const name=val("c_name").trim();
+  if(!name){flash("custMsg","Enter a customer name first.");return;}
+  const c={name:name,addr:val("c_addr"),attn:val("c_attn"),tel:val("c_tel")};
+  try{
+    await window.storage.set(custKey(name),JSON.stringify(c));
+    customers[custKey(name)]=c;
+    flash("custMsg","Saved "+name+" ✓");
+    renderCustomerAdminList();renderCustomerPicker();
+  }catch(e){flash("custMsg","Could not save — try again.");}
+}
+function adminClearCustomerForm(){
+  setVal("c_name","");setVal("c_addr","");setVal("c_attn","");setVal("c_tel","");
+}
+function adminEditCustomer(key){
+  const c=customers[key];if(!c)return;
+  setVal("c_name",c.name);setVal("c_addr",c.addr);setVal("c_attn",c.attn);setVal("c_tel",c.tel);
+  flash("custMsg","Editing "+c.name+" — change details and click Save.");
+}
+async function adminDeleteCustomer(key){
+  const c=customers[key];if(!c)return;
+  try{
+    await window.storage.delete(key);
+    delete customers[key];
+    flash("custMsg","Removed "+c.name+".");
+    renderCustomerAdminList();renderCustomerPicker();
+  }catch(e){flash("custMsg","Could not delete.");}
+}
+function useCustomer(key){
+  const c=customers[key];if(!c)return;
+  setVal("f_cust",c.name);setVal("f_addr",c.addr);
+  setVal("f_attn",c.attn);setVal("f_tel",c.tel);
+  document.getElementById("custPick").value=key;
+  renderInvoice();showTab("invoice");
+  status("Customer loaded: "+c.name);
+}
+function renderCustomerAdminList(){
+  const box=document.getElementById("custAdminList");
+  const q=(document.getElementById("custSearch").value||"").toLowerCase();
+  const keys=Object.keys(customers).sort((a,b)=>customers[a].name.localeCompare(customers[b].name));
+  const filtered=keys.filter(k=>customers[k].name.toLowerCase().includes(q)||String(customers[k].tel||"").includes(q));
+  if(!filtered.length){box.innerHTML='<div class="hint">'+(keys.length?"No match for that search.":"No customers yet. Add your first one above.")+'</div>';return;}
+  box.innerHTML="";
+  filtered.forEach(k=>{
+    const c=customers[k];
+    const div=document.createElement("div");div.className="list-item";
+    div.innerHTML='<div style="min-width:0;"><div class="nm">'+escHtml(c.name)+'</div>'+
+      '<div class="sub">'+escHtml((c.tel||"—")+(c.attn?" · "+c.attn:""))+'</div></div>'+
+      '<span style="flex:none;">'+
+      '<button class="mini use" onclick="useCustomer(\''+escAttr(k)+'\')">Use</button>'+
+      '<button class="mini edit" onclick="adminEditCustomer(\''+escAttr(k)+'\')">Edit</button>'+
+      '<button class="mini del" onclick="adminDeleteCustomer(\''+escAttr(k)+'\')">Delete</button></span>';
+    box.appendChild(div);
+  });
+}
+function renderCustomerPicker(){
+  const sel=document.getElementById("custPick");
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Select a customer —</option>';
+  Object.keys(customers).sort((a,b)=>customers[a].name.localeCompare(customers[b].name)).forEach(k=>{
+    const opt=document.createElement("option");
+    opt.value=k;opt.textContent=customers[k].name;
+    sel.appendChild(opt);
+  });
+  sel.value=cur;
+}
+function pickCustomer(key){
+  if(!key)return;
+  useCustomer(key);
+}
+async function loadCustomers(){
+  customers={};
+  try{
+    const res=await window.storage.list("cust:");
+    if(res&&res.keys){
+      for(const k of res.keys){
+        try{const r=await window.storage.get(k);customers[k]=JSON.parse(r.value);}catch(e){}
+      }
+    }
+  }catch(e){}
+  renderCustomerAdminList();renderCustomerPicker();
+}
+
+/* ---------- invoices ---------- */
+async function saveInvoice(){
+  const inv={no:val("f_no"),date:val("f_date"),po:val("f_po"),terms:val("f_terms"),
+    cust:val("f_cust"),addr:val("f_addr"),attn:val("f_attn"),tel:val("f_tel"),
+    round:val("f_round"),dep:val("f_dep"),items:items};
+  try{
+    await window.storage.set("inv:"+inv.no,JSON.stringify(inv));
+    const num=parseInt(inv.no.replace(/\D/g,""),10);
+    if(!isNaN(num)){
+      await window.storage.set("meta:nextnum",String(num+1));
+      setVal("co_next",String(num+1));
+    }
+    status("Saved "+inv.no+" ✓");
+    loadHistory();
+  }catch(e){status("Save failed — try again.");}
+}
+async function loadHistory(){
+  const box=document.getElementById("historyList");
+  try{
+    const res=await window.storage.list("inv:");
+    if(!res||!res.keys.length){box.innerHTML='<div class="hint">No saved invoices yet.</div>';return;}
+    box.innerHTML="";
+    res.keys.sort().reverse().slice(0,25).forEach(k=>{
+      const no=k.replace("inv:","");
+      const div=document.createElement("div");div.className="list-item";
+      div.innerHTML='<b>'+escHtml(no)+'</b><span><button class="mini use" onclick="openInvoice(\''+escAttr(no)+'\')">Open</button></span>';
+      box.appendChild(div);
+    });
+  }catch(e){box.innerHTML='<div class="hint">No saved invoices yet.</div>';}
+}
+async function openInvoice(no){
+  try{
+    const res=await window.storage.get("inv:"+no);
+    if(!res)return;
+    const inv=JSON.parse(res.value);
+    setVal("f_no",inv.no);setVal("f_date",inv.date);setVal("f_po",inv.po);
+    setVal("f_terms",inv.terms);setVal("f_cust",inv.cust);setVal("f_addr",inv.addr);
+    setVal("f_attn",inv.attn);setVal("f_tel",inv.tel);
+    setVal("f_round",inv.round);setVal("f_dep",inv.dep);
+    items=inv.items&&inv.items.length?inv.items:[{desc:"",qty:1,price:0,disc:0}];
+    renderEditor();renderInvoice();
+    status("Opened "+no);
+  }catch(e){status("Could not open invoice.");}
+}
+async function newInvoice(){
+  document.getElementById("custPick").value="";
+  ["f_cust","f_addr","f_attn","f_tel","f_po"].forEach(id=>setVal(id,""));
+  setVal("f_round","0");setVal("f_dep","0");
+  document.getElementById("f_date").valueAsDate=new Date();
+  items=[{desc:"",qty:1,price:0,disc:0}];
+  try{
+    const res=await window.storage.get("meta:nextnum");
+    if(res)setVal("f_no","INV"+String(parseInt(res.value,10)).padStart(6,"0"));
+  }catch(e){}
+  renderEditor();renderInvoice();
+}
+
+/* ---------- init ---------- */
+async function init(){
+  document.getElementById("f_date").valueAsDate=new Date();
+  await loadCompany();
+  try{
+    const n=await window.storage.get("meta:nextnum");
+    if(n){
+      setVal("f_no","INV"+String(parseInt(n.value,10)).padStart(6,"0"));
+      setVal("co_next",n.value);
+    }
+  }catch(e){}
+  try{
+    const l=await window.storage.get("meta:logo");
+    if(l)setLogo(l.value);
+  }catch(e){}
+  renderEditor();renderInvoice();loadHistory();loadCustomers();
+  ["f_no","f_date","f_po","f_terms","f_cust","f_addr","f_attn","f_tel","f_round","f_dep"]
+    .forEach(id=>document.getElementById(id).addEventListener("input",renderInvoice));
+}
+init();
+</script>
+</body>
+</html>
