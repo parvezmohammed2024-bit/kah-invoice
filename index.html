@@ -118,15 +118,19 @@
   .sigs{display:flex;justify-content:space-between;margin-top:22mm;font-size:12px;}
   .sig{width:44%;text-align:center;} .sig .line{border-top:1px solid #000;padding-top:2mm;}
 
-  @page{size:A4;margin:0;}
+  @page{size:A4 portrait;margin:0;}
   @media print{
-    body{background:#fff;}
+    html,body{background:#fff;width:210mm;margin:0;padding:0;}
     .panel{display:none !important;}
-    .stage{padding:0;height:auto;overflow:visible;}
-    .sheet-wrap{box-shadow:none;margin:0;}
-    .sheet{width:210mm;min-height:297mm;}
+    .app{display:block;width:210mm;margin:0;padding:0;min-height:0;}
+    .stage{display:block;padding:0;margin:0;width:210mm;height:auto;overflow:visible;}
+    .sheet-wrap{box-shadow:none;margin:0;padding:0;width:210mm;height:auto;overflow:visible;}
+    .sheet{width:210mm;min-height:297mm;height:auto;margin:0;
+      transform:none !important;zoom:1 !important;
+      page-break-after:avoid;break-after:avoid;}
   }
-  @media (max-width:900px){
+  /* screen-only: shrink preview on small screens (must NOT apply to print) */
+  @media screen and (max-width:900px){
     .app{flex-direction:column;}
     .panel{width:100%;min-width:0;height:auto;border-right:none;border-bottom:1px solid var(--line);}
     .stage{height:auto;}
@@ -286,6 +290,17 @@ KUALA LUMPUR</textarea>
         <button class="btn primary" onclick="saveCompany()">Save company settings</button>
       </div>
       <div class="statusmsg" id="coMsg"></div>
+
+      <fieldset style="margin-top:16px;">
+        <legend>Backup &amp; restore</legend>
+        <div class="actions">
+          <button class="btn secondary" onclick="exportBackup()">⬇ Export backup file</button>
+          <button class="btn secondary" onclick="document.getElementById('f_restore').click()">⬆ Restore from backup</button>
+        </div>
+        <input type="file" id="f_restore" accept=".json,application/json" style="display:none;">
+        <div class="statusmsg" id="bkMsg"></div>
+        <div class="hint">Export downloads one file containing every customer, invoice, and setting. Keep it in Google Drive. Restore loads it into any computer or browser &mdash; use this to move your data or recover it.</div>
+      </fieldset>
     </div>
   </div>
 
@@ -533,6 +548,58 @@ async function removeLogo(){
   try{await window.storage.delete("meta:logo");flash("coMsg","Logo removed.");}catch(e){}
 }
 
+/* ---------- backup & restore ---------- */
+async function exportBackup(){
+  try{
+    const dump={_type:"kah-invoice-backup",_version:1,_exported:new Date().toISOString(),data:{}};
+    for(const prefix of ["cust:","inv:","meta:"]){
+      const res=await window.storage.list(prefix);
+      if(res&&res.keys){
+        for(const k of res.keys){
+          try{const r=await window.storage.get(k);dump.data[k]=r.value;}catch(e){}
+        }
+      }
+    }
+    const count=Object.keys(dump.data).length;
+    const blob=new Blob([JSON.stringify(dump,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="invoice-backup-"+new Date().toISOString().slice(0,10)+".json";
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    flash("bkMsg","Backup downloaded ("+count+" records) ✓");
+  }catch(e){flash("bkMsg","Export failed — try again.");}
+}
+
+document.getElementById("f_restore").addEventListener("change",e=>{
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    let dump;
+    try{dump=JSON.parse(ev.target.result);}
+    catch(err){flash("bkMsg","That file is not a valid backup.");e.target.value="";return;}
+    if(!dump||dump._type!=="kah-invoice-backup"||!dump.data){
+      flash("bkMsg","That file is not an invoice backup.");e.target.value="";return;}
+    const n=Object.keys(dump.data).length;
+    if(!confirm("Restore "+n+" records from this backup?\n\nRecords with the same invoice number or customer name will be overwritten. Anything not in the backup is left untouched.")){
+      e.target.value="";return;}
+    let ok=0,fail=0;
+    for(const k in dump.data){
+      try{await window.storage.set(k,dump.data[k]);ok++;}catch(err){fail++;}
+    }
+    e.target.value="";
+    flash("bkMsg","Restored "+ok+" records"+(fail?" ("+fail+" failed)":"")+" ✓");
+    await loadCompany();await loadCustomers();await loadHistory();
+    try{
+      const nn=await window.storage.get("meta:nextnum");
+      if(nn){setVal("co_next",nn.value);setVal("f_no","INV"+String(parseInt(nn.value,10)).padStart(6,"0"));}
+    }catch(err){}
+    try{const l=await window.storage.get("meta:logo");if(l)setLogo(l.value);}catch(err){}
+    renderInvoice();
+  };
+  reader.readAsText(file);
+});
+
 /* ---------- customers (admin) ---------- */
 function custKey(name){return "cust:"+name.trim().toUpperCase().replace(/\s+/g,"_").replace(/[\/\\'"]/g,"");}
 
@@ -628,8 +695,12 @@ async function saveInvoice(){
     await window.storage.set("inv:"+inv.no,JSON.stringify(inv));
     const num=parseInt(inv.no.replace(/\D/g,""),10);
     if(!isNaN(num)){
-      await window.storage.set("meta:nextnum",String(num+1));
-      setVal("co_next",String(num+1));
+      let cur=0;
+      try{const r=await window.storage.get("meta:nextnum");cur=parseInt(r.value,10)||0;}catch(e){}
+      if(num+1>cur){
+        await window.storage.set("meta:nextnum",String(num+1));
+        setVal("co_next",String(num+1));
+      }
     }
     status("Saved "+inv.no+" ✓");
     loadHistory();
