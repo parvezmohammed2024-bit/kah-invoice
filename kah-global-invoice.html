@@ -927,6 +927,18 @@ async function convertToInvoice(){
   status("Created invoice "+inv.no+" from "+q.no+" — check, then Save invoice.");
 }
 
+/* ---------- PDF file name ----------
+   Browsers name the saved PDF after the page title, so while printing
+   the title becomes e.g. "HAFIRA SHIRT - Quotation QUO000001". */
+let savedTitle=null;
+function pdfName(){
+  const cust=val("f_cust").trim()||"No customer";
+  const kind=mode==="quotation"?"Quotation":"Invoice";
+  return (cust+" - "+kind+" "+val("f_no").trim()).replace(/[\\/:*?"<>|]+/g," ").replace(/\s+/g," ").trim();
+}
+window.addEventListener("beforeprint",()=>{if(savedTitle===null)savedTitle=document.title;document.title=pdfName();});
+window.addEventListener("afterprint",()=>{if(savedTitle!==null){document.title=savedTitle;savedTitle=null;}});
+
 /* ---------- init ---------- */
 async function init(){
   await loadCompany();
