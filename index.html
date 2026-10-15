@@ -113,7 +113,16 @@
 
   .invnote{border:1px solid #000;padding:2.5mm 3.5mm;margin-bottom:4mm;font-size:12px;
     line-height:1.5;white-space:pre-line;width:110mm;}
-  .invnote::before{content:"Note :";display:block;font-weight:bold;margin-bottom:1mm;}
+  .invnote::before{content:attr(data-label);display:block;font-weight:bold;margin-bottom:1mm;}
+  body.mode-quotation #r_grand td{border-top:1.5px solid #000;}
+
+  /* quotation-only / invoice-only bits */
+  body:not(.mode-quotation) .q-only{display:none !important;}
+  body.mode-quotation .i-only{display:none !important;}
+  .tab.q.active{color:var(--brand-pink);border-bottom-color:var(--brand-pink);}
+  .modebadge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.6px;padding:2px 8px;
+    border-radius:10px;background:#f1faf5;color:var(--brand-green);margin-bottom:10px;}
+  body.mode-quotation .modebadge{background:#fdeef4;color:var(--brand-pink);}
 
   .sigs{display:flex;justify-content:space-between;margin-top:22mm;font-size:12px;}
   .sig{width:44%;text-align:center;} .sig .line{border-top:1px solid #000;padding-top:2mm;}
@@ -150,21 +159,27 @@
     </div>
 
     <div class="tabs">
-      <button class="tab active" data-tab="invoice" onclick="showTab('invoice')">Invoice</button>
+      <button class="tab active" data-tab="invoice" onclick="setMode('invoice')">Invoice</button>
+      <button class="tab q" data-tab="quotation" onclick="setMode('quotation')">Quotation</button>
       <button class="tab" data-tab="customers" onclick="showTab('customers')">Customers</button>
-      <button class="tab" data-tab="company" onclick="showTab('company')">Company Settings</button>
+      <button class="tab" data-tab="company" onclick="showTab('company')">Settings</button>
     </div>
 
-    <!-- ======= TAB: INVOICE ======= -->
+    <!-- ======= TAB: INVOICE / QUOTATION (shared editor) ======= -->
     <div class="tabpage active" id="tab-invoice">
+      <div class="modebadge" id="modeBadge">INVOICE</div>
       <fieldset>
-        <legend>Invoice details</legend>
+        <legend><span class="i-only">Invoice details</span><span class="q-only">Quotation details</span></legend>
         <div class="row2">
-          <div><label>Invoice No.</label><input type="text" id="f_no" value="INV000073"></div>
+          <div><label><span class="i-only">Invoice No.</span><span class="q-only">Quotation No.</span></label><input type="text" id="f_no" value="INV000073"></div>
           <div><label>Date</label><input type="date" id="f_date"></div>
         </div>
+        <div class="row2 q-only">
+          <div><label>Valid until</label><input type="date" id="f_valid"></div>
+          <div></div>
+        </div>
         <div class="row2">
-          <div><label>P/O Ref.</label><input type="text" id="f_po" placeholder="Optional"></div>
+          <div><label><span class="i-only">P/O Ref.</span><span class="q-only">Ref.</span></label><input type="text" id="f_po" placeholder="Optional"></div>
           <div><label>Terms</label>
             <select id="f_terms">
               <option>C.O.D.</option><option>7 Days</option><option>14 Days</option>
@@ -202,23 +217,30 @@
         <legend>Adjustments</legend>
         <div class="row2">
           <div><label>Rounding Adj. (RM)</label><input type="number" id="f_round" step="0.01" value="0"></div>
-          <div><label>Deposit (RM)</label><input type="number" id="f_dep" step="0.01" value="0"></div>
+          <div class="i-only"><label>Deposit (RM)</label><input type="number" id="f_dep" step="0.01" value="0"></div>
         </div>
       </fieldset>
 
+      <fieldset class="q-only">
+        <legend>Terms &amp; conditions</legend>
+        <textarea id="f_qnote" rows="4" placeholder="e.g.&#10;Prices are in Ringgit Malaysia.&#10;50% deposit upon confirmation, balance before delivery.&#10;Delivery: 14 working days after artwork approval."></textarea>
+        <div class="hint">Printed on this quotation. The default text comes from <b>Settings</b> → Quotation defaults.</div>
+      </fieldset>
+
       <div class="actions">
-        <button class="btn primary" onclick="saveInvoice()">Save invoice</button>
+        <button class="btn primary" onclick="saveDoc()"><span class="i-only">Save invoice</span><span class="q-only">Save quotation</span></button>
         <button class="btn pink" onclick="window.print()">Print / Save PDF</button>
-        <button class="btn secondary" onclick="newInvoice()">New invoice</button>
+        <button class="btn secondary" onclick="newDoc()"><span class="i-only">New invoice</span><span class="q-only">New quotation</span></button>
+        <button class="btn secondary q-only" onclick="convertToInvoice()">→ Convert to invoice</button>
       </div>
       <div class="statusmsg" id="statusMsg"></div>
 
       <fieldset style="margin-top:16px;">
-        <legend>Saved invoices</legend>
-        <div id="historyList"><div class="hint">No saved invoices yet.</div></div>
+        <legend><span class="i-only">Saved invoices</span><span class="q-only">Saved quotations</span></legend>
+        <div id="historyList"><div class="hint">Nothing saved yet.</div></div>
       </fieldset>
 
-      <div class="hint">To get a PDF: click <b>Print / Save PDF</b>, then choose "Save as PDF" as the printer. Output is A4, matching your existing invoice format.</div>
+      <div class="hint">To get a PDF: click <b>Print / Save PDF</b>, then choose "Save as PDF" as the printer. Output is A4, matching your existing invoice format.<span class="q-only"> When the customer accepts, click <b>Convert to invoice</b> — items and customer carry over with the next invoice number.</span></div>
     </div>
 
     <!-- ======= TAB: CUSTOMERS (ADMIN) ======= -->
@@ -286,6 +308,19 @@ KUALA LUMPUR</textarea>
         <div class="hint">e.g. 73 &rarr; INV000073. Auto-increments each time you save an invoice.</div>
       </fieldset>
 
+      <fieldset>
+        <legend>Quotation defaults</legend>
+        <div class="row2">
+          <div><label>Next quotation number</label><input type="number" id="co_qnext" min="1" value="1"></div>
+          <div><label>Valid for (days)</label><input type="number" id="co_qvalid" min="1" value="30"></div>
+        </div>
+        <label>Default terms &amp; conditions</label>
+        <textarea id="co_qnote" rows="4">Prices quoted are in Ringgit Malaysia (RM).
+50% deposit upon confirmation, balance before delivery.
+Delivery lead time to be confirmed upon order.</textarea>
+        <div class="hint">e.g. 1 &rarr; QUO000001. Terms fill into every new quotation (you can still edit them per quotation).</div>
+      </fieldset>
+
       <div class="actions">
         <button class="btn primary" onclick="saveCompany()">Save company settings</button>
       </div>
@@ -320,18 +355,19 @@ Tel No. : 014-2785012 / 03-91083269</div>
 
       <div class="inv-meta">
         <div class="billto">
-          <div class="lbl">Bill To #</div>
+          <div class="lbl" id="p_tolbl">Bill To #</div>
           <div class="name" id="p_cust">&nbsp;</div>
           <div id="p_addr"></div>
           <div style="margin-top:5mm;" id="p_attn"></div>
           <div id="p_tel"></div>
         </div>
         <div class="invbox">
-          <div class="title">I N V O I C E</div>
+          <div class="title" id="p_title">I N V O I C E</div>
           <table>
             <tr><td>No. :</td><td id="p_no"></td></tr>
             <tr><td>Date :</td><td id="p_date"></td></tr>
-            <tr><td>P/O Ref. :</td><td id="p_po"></td></tr>
+            <tr class="q-only"><td>Valid Until :</td><td id="p_valid"></td></tr>
+            <tr><td id="p_polbl">P/O Ref. :</td><td id="p_po"></td></tr>
             <tr><td>Terms :</td><td id="p_terms"></td></tr>
             <tr><td style="padding-top:5mm;">Page :</td><td style="padding-top:5mm;">1</td></tr>
           </table>
@@ -351,7 +387,8 @@ Tel No. : 014-2785012 / 03-91083269</div>
       </table>
 
       <div class="inv-bottom">
-        <div class="invnote" id="h_note" style="display:none;"></div>
+        <div class="invnote q-only" id="p_qnote" data-label="Terms &amp; Conditions :" style="display:none;"></div>
+        <div class="invnote" id="h_note" data-label="Note :" style="display:none;"></div>
         <div class="totals-line">
           <div class="words"><b>RINGGIT M'SIA</b><span class="w" id="p_words"></span></div>
           <table class="totals">
@@ -359,13 +396,13 @@ Tel No. : 014-2785012 / 03-91083269</div>
             <tr><td>Discount</td><td id="t_disc">0.00</td></tr>
             <tr class="sep"><td>Total</td><td id="t_total">0.00</td></tr>
             <tr><td>Rounding Adj.</td><td id="t_round">0.00</td></tr>
-            <tr class="sep"><td>Deposit</td><td id="t_dep">0.00</td></tr>
-            <tr><td>Grand Total</td><td id="t_grand">0.00</td></tr>
+            <tr class="sep i-only"><td>Deposit</td><td id="t_dep">0.00</td></tr>
+            <tr id="r_grand"><td>Grand Total</td><td id="t_grand">0.00</td></tr>
           </table>
         </div>
         <div class="sigs">
           <div class="sig"><div class="line" id="h_sig">FOR KAH GLOBAL SDN BHD</div></div>
-          <div class="sig"><div class="line">CUSTOMER SIGNATURE &amp; STAMP</div></div>
+          <div class="sig"><div class="line" id="p_custsig">CUSTOMER SIGNATURE &amp; STAMP</div></div>
         </div>
       </div>
 
@@ -391,11 +428,46 @@ if(!window.storage){
 /* ---------- state ---------- */
 let items=[{desc:"",qty:1,price:0,disc:0}];
 let customers={}; // key -> {name,addr,attn,tel}
+let mode="invoice"; // "invoice" | "quotation"
+const drafts={invoice:null,quotation:null}; // unsaved work kept when switching tabs
+
+/* document-type config */
+const DOC={
+  invoice:  {prefix:"INV",store:"inv:",nextKey:"meta:nextnum", label:"invoice"},
+  quotation:{prefix:"QUO",store:"quo:",nextKey:"meta:qnextnum",label:"quotation"}
+};
+function cfg(){return DOC[mode];}
+function docNo(m,n){return DOC[m].prefix+String(n).padStart(6,"0");}
 
 /* ---------- tabs ---------- */
 function showTab(name){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===name));
+  const tabName=(name==="invoice")?mode:name; // editor tab highlights current doc type
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===tabName));
   document.querySelectorAll(".tabpage").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
+}
+
+/* switch between Invoice and Quotation, keeping each one's unsaved draft */
+async function setMode(m){
+  if(m!==mode){
+    drafts[mode]=collectDoc();
+    mode=m;
+    applyModeUI();
+    if(drafts[m])loadDoc(drafts[m]);
+    else await newDoc();
+    loadHistory();
+  }
+  showTab("invoice");
+}
+function applyModeUI(){
+  const q=mode==="quotation";
+  document.body.classList.toggle("mode-quotation",q);
+  document.getElementById("modeBadge").textContent=q?"QUOTATION":"INVOICE";
+  document.getElementById("p_title").textContent=q?"Q U O T A T I O N":"I N V O I C E";
+  document.getElementById("p_tolbl").textContent=q?"Quote To #":"Bill To #";
+  document.getElementById("p_polbl").textContent=q?"Ref. :":"P/O Ref. :";
+  document.getElementById("p_custsig").textContent=q?"ACCEPTED BY (SIGNATURE & STAMP)":"CUSTOMER SIGNATURE & STAMP";
+  const co=val("co_name").trim()||"Kah Global";
+  document.title=co+" — "+(q?"Quotation":"Invoice")+" System";
 }
 
 /* ---------- number to words ---------- */
@@ -431,6 +503,9 @@ function escAttr(s){return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;"
 function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function flash(id,msg){const el=document.getElementById(id);el.textContent=msg;setTimeout(()=>{if(el.textContent===msg)el.textContent="";},4000);}
 function status(m){flash("statusMsg",m);}
+function dmy(d){return d?d.split("-").reverse().join("/"):"";}
+function isoDate(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
+function addDays(iso,n){const p=(iso||isoDate(new Date())).split("-").map(Number);return isoDate(new Date(p[0],p[1]-1,p[2]+n));}
 
 /* ---------- items editor ---------- */
 function renderEditor(){
@@ -459,8 +534,10 @@ function renderInvoice(){
   document.getElementById("p_no").textContent=val("f_no");
   document.getElementById("p_po").textContent=val("f_po");
   document.getElementById("p_terms").textContent=val("f_terms");
-  const d=val("f_date");
-  document.getElementById("p_date").textContent=d?d.split("-").reverse().join("/"):"";
+  document.getElementById("p_date").textContent=dmy(val("f_date"));
+  document.getElementById("p_valid").textContent=dmy(val("f_valid"));
+  const qn=document.getElementById("p_qnote"),qt=val("f_qnote").trim();
+  qn.textContent=qt;qn.style.display=(mode==="quotation"&&qt)?"block":"none";
 
   const tb=document.getElementById("p_items");tb.innerHTML="";
   let sub=0,discTotal=0;
@@ -474,7 +551,7 @@ function renderInvoice(){
       '<td class="r">'+(it.disc?fmt(it.disc):"")+'</td><td class="r">'+fmt(amt)+'</td>';
     tb.appendChild(tr);
   });
-  const round=parseFloat(val("f_round"))||0,dep=parseFloat(val("f_dep"))||0;
+  const round=parseFloat(val("f_round"))||0,dep=(mode==="invoice")?(parseFloat(val("f_dep"))||0):0;
   const total=sub-discTotal,grand=total+round-dep;
   document.getElementById("t_sub").textContent=fmt(sub);
   document.getElementById("t_disc").textContent=fmt(discTotal);
@@ -497,21 +574,29 @@ function applyCompany(c){
   const note=(c.note||"").trim();
   noteEl.textContent=note;
   noteEl.style.display=note?"block":"none";
-  document.title=c.name+" — Invoice System";
+  applyModeUI();
 }
 async function saveCompany(){
   const c={name:val("co_name").trim()||"MY COMPANY",reg:val("co_reg").trim(),
-           addr:val("co_addr"),tel:val("co_tel").trim(),note:val("co_note")};
+           addr:val("co_addr"),tel:val("co_tel").trim(),note:val("co_note"),
+           qnote:val("co_qnote"),qvalid:parseInt(val("co_qvalid"),10)||30};
   applyCompany(c);
   try{
     await window.storage.set("meta:company",JSON.stringify(c));
     const next=parseInt(val("co_next"),10);
     if(!isNaN(next)&&next>0){
       await window.storage.set("meta:nextnum",String(next));
-      setVal("f_no","INV"+String(next).padStart(6,"0"));
-      renderInvoice();
+      if(mode==="invoice")setVal("f_no",docNo("invoice",next));
+      else if(drafts.invoice)drafts.invoice.no=docNo("invoice",next);
     }
-    flash("coMsg","Company settings saved ✓");
+    const qnext=parseInt(val("co_qnext"),10);
+    if(!isNaN(qnext)&&qnext>0){
+      await window.storage.set("meta:qnextnum",String(qnext));
+      if(mode==="quotation")setVal("f_no",docNo("quotation",qnext));
+      else if(drafts.quotation)drafts.quotation.no=docNo("quotation",qnext);
+    }
+    renderInvoice();
+    flash("coMsg","Settings saved ✓");
   }catch(e){flash("coMsg","Could not save — try again.");}
 }
 async function loadCompany(){
@@ -522,6 +607,8 @@ async function loadCompany(){
       setVal("co_name",c.name);setVal("co_reg",c.reg);
       setVal("co_addr",c.addr);setVal("co_tel",c.tel);
       setVal("co_note",c.note||"");
+      if(c.qnote!==undefined)setVal("co_qnote",c.qnote);
+      if(c.qvalid)setVal("co_qvalid",c.qvalid);
       applyCompany(c);
     }
   }catch(e){}
@@ -552,7 +639,7 @@ async function removeLogo(){
 async function exportBackup(){
   try{
     const dump={_type:"kah-invoice-backup",_version:1,_exported:new Date().toISOString(),data:{}};
-    for(const prefix of ["cust:","inv:","meta:"]){
+    for(const prefix of ["cust:","inv:","quo:","meta:"]){
       const res=await window.storage.list(prefix);
       if(res&&res.keys){
         for(const k of res.keys){
@@ -590,10 +677,7 @@ document.getElementById("f_restore").addEventListener("change",e=>{
     e.target.value="";
     flash("bkMsg","Restored "+ok+" records"+(fail?" ("+fail+" failed)":"")+" ✓");
     await loadCompany();await loadCustomers();await loadHistory();
-    try{
-      const nn=await window.storage.get("meta:nextnum");
-      if(nn){setVal("co_next",nn.value);setVal("f_no","INV"+String(parseInt(nn.value,10)).padStart(6,"0"));}
-    }catch(err){}
+    await loadCounters(true);
     try{const l=await window.storage.get("meta:logo");if(l)setLogo(l.value);}catch(err){}
     renderInvoice();
   };
@@ -686,84 +770,114 @@ async function loadCustomers(){
   renderCustomerAdminList();renderCustomerPicker();
 }
 
-/* ---------- invoices ---------- */
-async function saveInvoice(){
-  const inv={no:val("f_no"),date:val("f_date"),po:val("f_po"),terms:val("f_terms"),
+/* ---------- invoices & quotations ---------- */
+function collectDoc(){
+  return {type:mode,no:val("f_no"),date:val("f_date"),valid:val("f_valid"),po:val("f_po"),terms:val("f_terms"),
     cust:val("f_cust"),addr:val("f_addr"),attn:val("f_attn"),tel:val("f_tel"),
-    round:val("f_round"),dep:val("f_dep"),items:items};
+    round:val("f_round"),dep:val("f_dep"),qnote:val("f_qnote"),
+    items:JSON.parse(JSON.stringify(items))};
+}
+function loadDoc(d){
+  setVal("f_no",d.no||"");setVal("f_date",d.date||"");setVal("f_valid",d.valid||"");
+  setVal("f_po",d.po||"");setVal("f_terms",d.terms||"C.O.D.");
+  setVal("f_cust",d.cust||"");setVal("f_addr",d.addr||"");
+  setVal("f_attn",d.attn||"");setVal("f_tel",d.tel||"");
+  setVal("f_round",d.round||"0");setVal("f_dep",d.dep||"0");
+  setVal("f_qnote",d.qnote||"");
+  document.getElementById("custPick").value="";
+  items=d.items&&d.items.length?JSON.parse(JSON.stringify(d.items)):[{desc:"",qty:1,price:0,disc:0}];
+  renderEditor();renderInvoice();
+}
+async function nextNum(m){
+  try{const r=await window.storage.get(DOC[m].nextKey);const n=parseInt(r.value,10);if(n>0)return n;}catch(e){}
+  return m==="invoice"?(parseInt(val("co_next"),10)||1):(parseInt(val("co_qnext"),10)||1);
+}
+async function loadCounters(refreshCurrent){
+  const n=await nextNum("invoice"),q=await nextNum("quotation");
+  setVal("co_next",n);setVal("co_qnext",q);
+  if(refreshCurrent)setVal("f_no",docNo(mode,mode==="invoice"?n:q));
+}
+
+async function saveDoc(){
+  const d=collectDoc(),c=cfg();
+  if(!d.no.trim()){status("Enter a "+c.label+" number first.");return;}
   try{
-    await window.storage.set("inv:"+inv.no,JSON.stringify(inv));
-    const num=parseInt(inv.no.replace(/\D/g,""),10);
+    await window.storage.set(c.store+d.no,JSON.stringify(d));
+    const num=parseInt(d.no.replace(/\D/g,""),10);
     if(!isNaN(num)){
-      let cur=0;
-      try{const r=await window.storage.get("meta:nextnum");cur=parseInt(r.value,10)||0;}catch(e){}
+      const cur=await nextNum(mode);
       if(num+1>cur){
-        await window.storage.set("meta:nextnum",String(num+1));
-        setVal("co_next",String(num+1));
+        await window.storage.set(c.nextKey,String(num+1));
+        setVal(mode==="invoice"?"co_next":"co_qnext",String(num+1));
       }
     }
-    status("Saved "+inv.no+" ✓");
+    status("Saved "+d.no+" ✓");
     loadHistory();
   }catch(e){status("Save failed — try again.");}
 }
 async function loadHistory(){
-  const box=document.getElementById("historyList");
+  const box=document.getElementById("historyList"),c=cfg();
+  const empty='<div class="hint">No saved '+c.label+'s yet.</div>';
   try{
-    const res=await window.storage.list("inv:");
-    if(!res||!res.keys.length){box.innerHTML='<div class="hint">No saved invoices yet.</div>';return;}
+    const res=await window.storage.list(c.store);
+    if(!res||!res.keys.length){box.innerHTML=empty;return;}
     box.innerHTML="";
-    res.keys.sort().reverse().slice(0,25).forEach(k=>{
-      const no=k.replace("inv:","");
+    for(const k of res.keys.sort().reverse().slice(0,25)){
+      const no=k.slice(c.store.length);
+      let sub="";
+      try{const r=await window.storage.get(k);const d=JSON.parse(r.value);sub=d.cust||"";}catch(e){}
       const div=document.createElement("div");div.className="list-item";
-      div.innerHTML='<b>'+escHtml(no)+'</b><span><button class="mini use" onclick="openInvoice(\''+escAttr(no)+'\')">Open</button></span>';
+      div.innerHTML='<div style="min-width:0;"><b>'+escHtml(no)+'</b>'+(sub?'<div class="sub">'+escHtml(sub)+'</div>':'')+'</div>'+
+        '<span style="flex:none;"><button class="mini use" onclick="openDoc(\''+escAttr(no)+'\')">Open</button>'+
+        (mode==="quotation"?'<button class="mini edit" onclick="openDoc(\''+escAttr(no)+'\').then(convertToInvoice)">→ Invoice</button>':'')+
+        '</span>';
       box.appendChild(div);
-    });
-  }catch(e){box.innerHTML='<div class="hint">No saved invoices yet.</div>';}
+    }
+  }catch(e){box.innerHTML=empty;}
 }
-async function openInvoice(no){
+async function openDoc(no){
   try{
-    const res=await window.storage.get("inv:"+no);
+    const res=await window.storage.get(cfg().store+no);
     if(!res)return;
-    const inv=JSON.parse(res.value);
-    setVal("f_no",inv.no);setVal("f_date",inv.date);setVal("f_po",inv.po);
-    setVal("f_terms",inv.terms);setVal("f_cust",inv.cust);setVal("f_addr",inv.addr);
-    setVal("f_attn",inv.attn);setVal("f_tel",inv.tel);
-    setVal("f_round",inv.round);setVal("f_dep",inv.dep);
-    items=inv.items&&inv.items.length?inv.items:[{desc:"",qty:1,price:0,disc:0}];
-    renderEditor();renderInvoice();
+    loadDoc(JSON.parse(res.value));
     status("Opened "+no);
-  }catch(e){status("Could not open invoice.");}
+  }catch(e){status("Could not open "+no+".");}
 }
-async function newInvoice(){
-  document.getElementById("custPick").value="";
-  ["f_cust","f_addr","f_attn","f_tel","f_po"].forEach(id=>setVal(id,""));
-  setVal("f_round","0");setVal("f_dep","0");
-  document.getElementById("f_date").valueAsDate=new Date();
-  items=[{desc:"",qty:1,price:0,disc:0}];
-  try{
-    const res=await window.storage.get("meta:nextnum");
-    if(res)setVal("f_no","INV"+String(parseInt(res.value,10)).padStart(6,"0"));
-  }catch(e){}
-  renderEditor();renderInvoice();
+async function newDoc(){
+  const today=isoDate(new Date());
+  const d={date:today,terms:"C.O.D.",round:"0",dep:"0",items:null};
+  if(mode==="quotation"){
+    d.valid=addDays(today,parseInt(val("co_qvalid"),10)||30);
+    d.qnote=val("co_qnote");
+  }
+  d.no=docNo(mode,await nextNum(mode));
+  loadDoc(d);
+}
+/* turn the current quotation into a new invoice (same customer & items, next INV number) */
+async function convertToInvoice(){
+  if(mode!=="quotation")return;
+  const q=collectDoc();
+  drafts.quotation=q;
+  mode="invoice";applyModeUI();
+  const inv=Object.assign({},q,{type:"invoice",no:docNo("invoice",await nextNum("invoice")),
+    date:isoDate(new Date()),po:q.po||q.no,dep:"0",valid:"",qnote:""});
+  loadDoc(inv);
+  loadHistory();showTab("invoice");
+  status("Created invoice "+inv.no+" from "+q.no+" — check, then Save invoice.");
 }
 
 /* ---------- init ---------- */
 async function init(){
-  document.getElementById("f_date").valueAsDate=new Date();
   await loadCompany();
-  try{
-    const n=await window.storage.get("meta:nextnum");
-    if(n){
-      setVal("f_no","INV"+String(parseInt(n.value,10)).padStart(6,"0"));
-      setVal("co_next",n.value);
-    }
-  }catch(e){}
+  await loadCounters(false);
   try{
     const l=await window.storage.get("meta:logo");
     if(l)setLogo(l.value);
   }catch(e){}
-  renderEditor();renderInvoice();loadHistory();loadCustomers();
-  ["f_no","f_date","f_po","f_terms","f_cust","f_addr","f_attn","f_tel","f_round","f_dep"]
+  applyModeUI();
+  await newDoc();
+  loadHistory();loadCustomers();
+  ["f_no","f_date","f_valid","f_po","f_terms","f_cust","f_addr","f_attn","f_tel","f_round","f_dep","f_qnote"]
     .forEach(id=>document.getElementById(id).addEventListener("input",renderInvoice));
 }
 init();

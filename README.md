@@ -1,6 +1,6 @@
 # Kah Global Invoice System
 
-A single-file invoicing app for Kah Global Sdn Bhd. No server, no database, no installation.
+A single-file invoicing & quotation app for Kah Global Sdn Bhd. No server, no database, no installation.
 
 ## Features
 - A4 invoice output matching the company's standard invoice format (print / save as PDF)
@@ -9,6 +9,7 @@ A single-file invoicing app for Kah Global Sdn Bhd. No server, no database, no i
 - Auto-incrementing invoice numbers (INV000073, INV000074, ...)
 - Saved invoice history — reopen and reprint any past invoice
 - Automatic "Ringgit Malaysia amount in words" line
+- **Quotations** — separate Quotation tab with its own numbering (QUO000001, ...), "Valid until" date, terms & conditions box, saved quotation history, and one-click **Convert to invoice**
 
 ## How to use
 Open `index.html` in any browser (Chrome recommended). That's it.
