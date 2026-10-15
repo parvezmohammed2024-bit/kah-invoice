@@ -139,6 +139,110 @@
   .sigs{display:flex;justify-content:space-between;margin-top:22mm;font-size:12px;}
   .sig{width:44%;text-align:center;} .sig .line{border-top:1px solid #000;padding-top:2mm;}
 
+  /* ============ CRM ============ */
+  .switcher{display:flex;gap:4px;background:#eef1f4;border-radius:8px;padding:3px;margin-bottom:14px;}
+  .switcher button{flex:1;border:none;background:none;padding:7px 8px;border-radius:6px;font-size:12.5px;font-weight:700;
+    color:var(--muted);cursor:pointer;letter-spacing:.3px;}
+  .switcher button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12);}
+  body.crm-on .app{display:none;}
+  #crmApp{display:none;min-height:100vh;}
+  body.crm-on #crmApp{display:flex;}
+  .crm-side{width:220px;min-width:220px;background:#16202c;color:#cfd6de;padding:16px 12px;height:100vh;position:sticky;top:0;
+    display:flex;flex-direction:column;gap:2px;}
+  .crm-side .brandbar h1{color:#fff;font-size:14px;} .crm-side .brandbar small{color:#8b96a3;}
+  .crm-side .switcher{background:#0e1620;} .crm-side .switcher button{color:#8b96a3;}
+  .crm-side .switcher button.on{background:#25313f;color:#fff;box-shadow:none;}
+  .crm-nav{display:flex;align-items:center;gap:9px;border:none;background:none;color:#cfd6de;text-align:left;
+    padding:9px 10px;border-radius:7px;font-size:13.5px;cursor:pointer;width:100%;}
+  .crm-nav:hover{background:#1f2b39;color:#fff;}
+  .crm-nav.on{background:var(--brand-green);color:#fff;font-weight:600;}
+  .crm-nav .ct{margin-left:auto;background:var(--brand-pink);color:#fff;font-size:10.5px;border-radius:9px;padding:1px 7px;font-weight:700;}
+  .crm-nav svg{width:16px;height:16px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .crm-side .foot{margin-top:auto;font-size:11px;color:#6d7885;line-height:1.5;padding:8px 6px 0;}
+  .crm-main{flex:1;min-width:0;padding:22px 26px 60px;height:100vh;overflow-y:auto;}
+  .crm-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .crm-head h2{margin:0;font-size:21px;margin-right:auto;}
+  .crm-head input[type=text],.crm-head select{width:auto;min-width:170px;}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px;}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:default;}
+  .kpi.click{cursor:pointer;} .kpi.click:hover{border-color:var(--brand-green);}
+  .kpi .l{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;}
+  .kpi .v{font-size:22px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;}
+  .kpi .s{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .kpi.warn .v{color:var(--danger);} .kpi.good .v{color:var(--brand-green);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px;min-width:0;}
+  .card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+  .card h3 .btn{margin-left:auto;text-transform:none;letter-spacing:0;}
+  .empty{color:var(--muted);font-size:12.5px;padding:8px 0;}
+  .tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .tbl th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600;
+    padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  .tbl td{padding:8px;border-bottom:1px solid #eef1f4;vertical-align:middle;}
+  .tbl tr.click{cursor:pointer;} .tbl tr.click:hover td{background:#f7faf8;}
+  .tbl .r{text-align:right;font-variant-numeric:tabular-nums;} .tbl .nw{white-space:nowrap;}
+  .pill{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:10px;background:#eef1f4;color:var(--muted);white-space:nowrap;}
+  .pill.green{background:#e3f4ea;color:#166341;} .pill.red{background:#fbe6e4;color:var(--danger);}
+  .pill.amber{background:#fff3d6;color:#8a5a00;} .pill.pink{background:#fdeef4;color:var(--brand-pink);} .pill.blue{background:#e5effb;color:#1d5aa6;}
+  .bars .bar{display:flex;align-items:center;gap:8px;font-size:12px;margin:5px 0;}
+  .bars .bar .n{width:130px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .bars .bar .t{flex:1;background:#eef1f4;border-radius:4px;height:14px;overflow:hidden;}
+  .bars .bar .f{height:100%;background:var(--brand-green);border-radius:4px;}
+  .bars .bar .x{width:96px;text-align:right;font-variant-numeric:tabular-nums;flex:none;}
+  .vbars{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:16px;}
+  .vbars .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10.5px;color:var(--muted);min-width:0;}
+  .vbars .c .b{width:70%;max-width:38px;background:var(--brand-green);border-radius:4px 4px 0 0;min-height:2px;position:relative;}
+  .vbars .c .b span{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:10px;color:var(--ink);white-space:nowrap;margin-bottom:2px;}
+  .vbars .c .lb{margin-top:4px;white-space:nowrap;}
+  /* kanban */
+  .board{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;align-items:flex-start;}
+  .col{flex:0 0 230px;background:#e6eaef;border-radius:10px;padding:8px;min-height:120px;}
+  .col.over{outline:2px dashed var(--brand-green);}
+  .col .ch{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:700;padding:4px 4px 8px;}
+  .col .ch small{font-weight:400;color:var(--muted);}
+  .kc{background:#fff;border-radius:8px;padding:9px 10px;margin-bottom:7px;font-size:12px;cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,.08);border-left:3px solid var(--brand-green);}
+  .kc:hover{box-shadow:0 2px 8px rgba(0,0,0,.14);}
+  .kc.late{border-left-color:var(--danger);} .kc.hot{border-left-color:var(--brand-pink);}
+  .kc .t{font-weight:700;font-size:12.5px;margin-bottom:2px;}
+  .kc .m{color:var(--muted);display:flex;justify-content:space-between;gap:6px;margin-top:3px;}
+  .prog{height:5px;background:#eef1f4;border-radius:3px;margin-top:6px;overflow:hidden;}
+  .prog i{display:block;height:100%;background:var(--brand-green);}
+  /* modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,22,32,.45);display:none;align-items:flex-start;justify-content:center;
+    z-index:50;padding:30px 12px;overflow-y:auto;}
+  .modal-bg.show{display:flex;}
+  .modal{background:#fff;border-radius:12px;width:100%;max-width:680px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .modal.wide{max-width:980px;}
+  .modal h2{margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:8px;}
+  .modal h2 .x{margin-left:auto;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted);}
+  .row3{display:flex;gap:10px;} .row3>div{flex:1;min-width:0;}
+  .sizes{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;}
+  .sizes div{text-align:center;font-size:10.5px;color:var(--muted);}
+  .sizes input{text-align:center;padding:6px 2px;}
+  .loglist{font-size:12px;color:var(--muted);line-height:1.7;max-height:140px;overflow:auto;}
+  .act{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #eef1f4;font-size:12.5px;}
+  .act input[type=checkbox]{width:17px;height:17px;margin-top:1px;accent-color:var(--brand-green);flex:none;}
+  .act .bd{flex:1;min-width:0;} .act .bd .s{color:var(--muted);font-size:11.5px;margin-top:2px;}
+  .act.done .bd b{text-decoration:line-through;color:var(--muted);}
+  .wa{color:#128c4b;font-weight:700;text-decoration:none;font-size:11.5px;}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+  .seg button{border:none;background:#fff;padding:7px 11px;font-size:12px;cursor:pointer;color:var(--muted);}
+  .seg button.on{background:var(--brand-green);color:#fff;}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+  @media (max-width:900px){
+    body.crm-on #crmApp{flex-direction:column;}
+    .crm-side{width:100%;min-width:0;height:auto;position:static;flex-direction:row;flex-wrap:wrap;}
+    .crm-side .brandbar,.crm-side .foot{display:none;}
+    .crm-side .switcher{width:100%;}
+    .crm-nav{width:auto;padding:7px 9px;font-size:12.5px;}
+    .crm-main{height:auto;padding:16px;}
+    .grid2{grid-template-columns:1fr;}
+    .row3{flex-direction:column;gap:0;}
+    .sizes{grid-template-columns:repeat(5,1fr);}
+  }
+  @media print{ body.crm-on #crmApp{display:none !important;} .modal-bg{display:none !important;} }
+
   @page{size:A4 portrait;margin:0;}
   @media print{
     html,body{background:#fff;width:210mm;margin:0;padding:0;}
@@ -168,6 +272,11 @@
     <div class="brandbar">
       <div class="dot" id="miniLogo"></div>
       <h1 id="miniName">KAH GLOBAL SDN BHD<br><small id="miniReg">1084190-X</small></h1>
+    </div>
+
+    <div class="switcher">
+      <button class="on">Invoices &amp; Quotes</button>
+      <button onclick="openCrm()">CRM</button>
     </div>
 
     <div class="tabs">
@@ -421,6 +530,30 @@ Tel No. : 014-2785012 / 03-91083269</div>
     </div></div>
   </div>
 </div>
+
+<!-- ================= CRM WORKSPACE ================= -->
+<div id="crmApp">
+  <nav class="crm-side">
+    <div class="brandbar">
+      <div class="dot" id="crmLogo"></div>
+      <h1 id="crmName">KAH GLOBAL<br><small>Sales &amp; Production CRM</small></h1>
+    </div>
+    <div class="switcher">
+      <button onclick="openDocs()">Invoices &amp; Quotes</button>
+      <button class="on">CRM</button>
+    </div>
+    <button class="crm-nav" data-v="dash" onclick="crmGo('dash')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</button>
+    <button class="crm-nav" data-v="pipe" onclick="crmGo('pipe')"><svg viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>Sales Pipeline<span class="ct" id="ctPipe" hidden></span></button>
+    <button class="crm-nav" data-v="jobs" onclick="crmGo('jobs')"><svg viewBox="0 0 24 24"><path d="M6 3l-3 4 3 2v12h12V9l3-2-3-4-4 2a2 2 0 0 1-4 0z"/></svg>Production<span class="ct" id="ctJobs" hidden></span></button>
+    <button class="crm-nav" data-v="cust" onclick="crmGo('cust')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-2-6-5-7"/></svg>Customers</button>
+    <button class="crm-nav" data-v="acts" onclick="crmGo('acts')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 14l2 2 4-4"/></svg>Follow-ups<span class="ct" id="ctActs" hidden></span></button>
+    <button class="crm-nav" data-v="pay" onclick="crmGo('pay')"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>Payments<span class="ct" id="ctPay" hidden></span></button>
+    <button class="crm-nav" data-v="rep" onclick="crmGo('rep')"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg>Reports</button>
+    <div class="foot">All data is saved in this browser. Use <b>Settings → Export backup</b> regularly.</div>
+  </nav>
+  <main class="crm-main" id="crmMain"></main>
+</div>
+<div class="modal-bg" id="crmModal" onclick="if(event.target===this)crmClose()"><div class="modal" id="crmModalBox"></div></div>
 
 <script>
 /* ---------- state ---------- */
@@ -700,7 +833,7 @@ async function removeLogo(){
 async function exportBackup(){
   try{
     const dump={_type:"kah-invoice-backup",_version:1,_exported:new Date().toISOString(),data:{}};
-    for(const prefix of ["cust:","inv:","quo:","meta:"]){
+    for(const prefix of ["cust:","inv:","quo:","meta:","crm:"]){
       const res=await window.storage.list(prefix);
       if(res&&res.keys){
         for(const k of res.keys){
@@ -751,7 +884,7 @@ function custKey(name){return "cust:"+name.trim().toUpperCase().replace(/\s+/g,"
 async function adminSaveCustomer(){
   const name=val("c_name").trim();
   if(!name){flash("custMsg","Enter a customer name first.");return;}
-  const c={name:name,addr:val("c_addr"),attn:val("c_attn"),tel:val("c_tel")};
+  const c=Object.assign({},customers[custKey(name)]||{},{name:name,addr:val("c_addr"),attn:val("c_attn"),tel:val("c_tel")}); // keep CRM fields
   try{
     await window.storage.set(custKey(name),JSON.stringify(c));
     customers[custKey(name)]=c;
@@ -951,6 +1084,563 @@ async function init(){
     .forEach(id=>document.getElementById(id).addEventListener("input",renderInvoice));
 }
 init();
+</script>
+<script>
+/* =====================================================================
+   CRM — sales pipeline, production tracking, customer 360, follow-ups,
+   payments (receivables) and reports for a uniform / garment maker.
+   Everything is stored in the same browser storage as invoices
+   (keys "crm:<kind>:<id>") and is included in Export backup.
+   ===================================================================== */
+const DEAL_STAGES=[["enq","New Enquiry"],["brief","Requirement Brief"],["sample","Sample / Artwork"],["quoted","Quotation Sent"],["nego","Negotiation"],["won","Won"],["lost","Lost"]];
+const JOB_STAGES=[["conf","Order Confirmed"],["art","Artwork Approved"],["fab","Fabric & Trims Ready"],["cut","Cutting"],["sew","Sewing"],["deco","Print / Embroidery"],["qc","Quality Check"],["pack","Packing"],["deliv","Delivered"]];
+const PRODUCTS=["Polo T-shirt","Round-neck T-shirt","Corporate Shirt","Uniform Set","Workwear / Coverall","Jacket / Windbreaker","School Uniform","Sports Jersey","Apron","Cap","Other"];
+const DECOS=["None","Screen Print","Embroidery","DTF Print","Heat Transfer","Sublimation"];
+const SOURCES=["WhatsApp","Walk-in","Referral","Website","Facebook / Instagram","Repeat customer","Phone call","Tender","Other"];
+const SEGMENTS=["Corporate","Government","School","Factory / Industrial","Event / Club","Reseller","Retail / Individual","Other"];
+const ACT_TYPES=["Call","WhatsApp","Email","Meeting","Site visit","Sample sent","Follow-up","Collect payment"];
+const PAY_METHODS=["Bank transfer","Cash","Cheque","DuitNow / QR","Card"];
+const SIZES=["XS","S","M","L","XL","2XL","3XL","4XL","5XL"];
+const ART=["Pending","Sent for approval","Approved"];
+const KIND={deal:"deals",job:"jobs",act:"acts",pay:"pays"};
+
+const C={deals:{},jobs:{},acts:{},pays:{},invs:{},quos:{}};
+let crmView="dash";
+const crmUI={pipeQ:"",jobQ:"",custQ:"",custSeg:"",actsTab:"open",payTab:"unpaid",repYear:new Date().getFullYear(),jobsLate:false};
+
+/* ---------- small helpers ---------- */
+const h=s=>escHtml(s==null?"":s);
+const a=s=>escAttr(s==null?"":s);
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function today(){return isoDate(new Date());}
+function rm(n){return "RM "+fmt(+n||0);}
+function num(v){return parseFloat(v)||0;}
+function fv(id){const el=document.getElementById(id);return el?el.value:"";}
+function daysDiff(fromIso,toIso){if(!fromIso||!toIso)return 0;const p=s=>{const x=s.split("-").map(Number);return Date.UTC(x[0],x[1]-1,x[2]);};return Math.round((p(toIso)-p(fromIso))/864e5);}
+function stageName(list,id){const s=list.find(x=>x[0]===id);return s?s[1]:id;}
+function opts(list,sel,blank){return (blank!==undefined?'<option value="">'+h(blank)+'</option>':'')+list.map(o=>{const v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;return '<option value="'+a(v)+'"'+(v===sel?' selected':'')+'>'+h(l)+'</option>';}).join("");}
+function custOpts(sel){return '<option value="">— Select customer —</option>'+Object.keys(customers).sort((x,y)=>customers[x].name.localeCompare(customers[y].name)).map(k=>'<option value="'+a(k)+'"'+(k===sel?' selected':'')+'>'+h(customers[k].name)+'</option>').join("");}
+function cname(key,fallback){return customers[key]?customers[key].name:(fallback||"—");}
+function waLink(tel,label){if(!tel)return "";let n=String(tel).replace(/\D/g,"");if(n.startsWith("0"))n="6"+n;return '<a class="wa" target="_blank" rel="noopener" href="https://wa.me/'+n+'" onclick="event.stopPropagation()">'+(label||"WhatsApp")+'</a>';}
+function sizeTotal(s){return SIZES.reduce((t,k)=>t+(parseInt((s||{})[k],10)||0),0);}
+function sizeText(s){return SIZES.filter(k=>parseInt((s||{})[k],10)).map(k=>k+":"+s[k]).join("  ");}
+function sizesInput(prefix,s){return '<div class="sizes">'+SIZES.map(k=>'<div>'+k+'<input type="number" min="0" id="'+prefix+k+'" value="'+(s&&s[k]?a(s[k]):"")+'" oninput="sizeSum(\''+prefix+'\')"></div>').join("")+'</div>';}
+function readSizes(prefix){const o={};SIZES.forEach(k=>{const v=parseInt(fv(prefix+k),10);if(v)o[k]=v;});return o;}
+function sizeSum(prefix){const t=sizeTotal(readSizes(prefix));const q=document.getElementById(prefix==="ds_"?"d_qty":"j_qty");if(q&&t)q.value=t;}
+function monthKey(iso){return (iso||"").slice(0,7);}
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+/* invoice / quotation money */
+/* sale value of a document (before any deposit is deducted) */
+function docGrand(d){let sub=0,disc=0;(d.items||[]).forEach(it=>{sub+=num(it.qty)*num(it.price);disc+=num(it.disc);});return sub-disc+num(d.round);}
+function invDue(d){const days=parseInt(String(d.terms||"").replace(/\D/g,""),10)||0;return addDays(d.date||today(),days);}
+function invPaid(no){return (C.pays[no]||[]).reduce((t,p)=>t+num(p.amount),0);}
+function invInfo(d){
+  const total=docGrand(d)-num(d.dep),paid=invPaid(d.no),bal=Math.round((total-paid)*100)/100,due=invDue(d);
+  const late=bal>0.004&&due<today();
+  const status=bal<=0.004?"Paid":late?"Overdue":paid>0?"Partial":"Unpaid";
+  return {total,paid,bal,due,late,status,age:late?daysDiff(due,today()):0};
+}
+function statusPill(s){const c={Paid:"green",Overdue:"red",Partial:"amber",Unpaid:"blue"}[s]||"";return '<span class="pill '+c+'">'+h(s)+'</span>';}
+function dealOpen(d){return d.stage!=="won"&&d.stage!=="lost";}
+function jobLate(j){return j.stage!=="deliv"&&j.due&&j.due<today();}
+function jobPct(j){const i=JOB_STAGES.findIndex(s=>s[0]===j.stage);return Math.round((i+1)/JOB_STAGES.length*100);}
+function ckey(name){return custKey(name||"");}
+
+/* ---------- storage ---------- */
+async function crmLoad(){
+  for(const k in C)C[k]={};
+  try{
+    const res=await window.storage.list("crm:");
+    for(const key of (res&&res.keys)||[]){
+      const p=key.split(":"),kind=KIND[p[1]];if(!kind)continue;
+      try{const r=await window.storage.get(key);C[kind][p.slice(2).join(":")]=JSON.parse(r.value);}catch(e){}
+    }
+  }catch(e){}
+  for(const [pre,kind] of [["inv:","invs"],["quo:","quos"]]){
+    try{
+      const res=await window.storage.list(pre);
+      for(const key of (res&&res.keys)||[]){
+        try{const r=await window.storage.get(key);const d=JSON.parse(r.value);d.type=pre==="inv:"?"invoice":"quotation";C[kind][key.slice(pre.length)]=d;}catch(e){}
+      }
+    }catch(e){}
+  }
+  await loadCustomers();
+}
+async function crmPut(kind,id,obj){
+  const k={deals:"deal",jobs:"job",acts:"act",pays:"pay"}[kind];
+  C[kind][id]=obj;
+  try{await window.storage.set("crm:"+k+":"+id,JSON.stringify(obj));return true;}
+  catch(e){alert("Could not save — browser storage may be full. Export a backup and remove old records.");return false;}
+}
+async function crmDel(kind,id){
+  const k={deals:"deal",jobs:"job",acts:"act",pays:"pay"}[kind];
+  delete C[kind][id];try{await window.storage.delete("crm:"+k+":"+id);}catch(e){}
+}
+async function nextSeq(key,start){let n=start||1;try{const r=await window.storage.get(key);n=parseInt(r.value,10)||n;}catch(e){}await window.storage.set(key,String(n+1));return n;}
+async function ensureCustomer(name,extra){
+  name=(name||"").trim();if(!name)return "";
+  const k=ckey(name);
+  if(!customers[k]){
+    customers[k]=Object.assign({name:name,addr:"",attn:"",tel:""},extra||{});
+    try{await window.storage.set(k,JSON.stringify(customers[k]));}catch(e){}
+    renderCustomerAdminList();renderCustomerPicker();
+  }
+  return k;
+}
+
+/* ---------- open / close ---------- */
+async function openCrm(view){
+  document.body.classList.add("crm-on");
+  const logo=document.getElementById("logoBox").innerHTML;
+  document.getElementById("crmLogo").innerHTML=logo;document.getElementById("crmLogo").className="dot has-img";
+  document.getElementById("crmName").innerHTML=h(val("co_name")||"KAH GLOBAL")+'<br><small>Sales &amp; Production CRM</small>';
+  await crmLoad();
+  crmGo(view||crmView);
+}
+function openDocs(){document.body.classList.remove("crm-on");crmClose();}
+function crmGo(v){
+  crmView=v;
+  document.querySelectorAll(".crm-nav").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  ({dash:vDash,pipe:vPipe,jobs:vJobs,cust:vCust,acts:vActs,pay:vPay,rep:vRep})[v]();
+  crmBadges();
+  document.getElementById("crmMain").scrollTop=0;
+}
+function crmRefresh(){crmGo(crmView);}
+function crmBadges(){
+  const t=today();
+  const set=(id,n)=>{const el=document.getElementById(id);el.hidden=!n;el.textContent=n;};
+  set("ctPipe",Object.values(C.deals).filter(dealOpen).length);
+  set("ctJobs",Object.values(C.jobs).filter(jobLate).length);
+  set("ctActs",Object.values(C.acts).filter(x=>!x.done&&x.due&&x.due<=t).length);
+  set("ctPay",Object.values(C.invs).filter(d=>invInfo(d).late).length);
+}
+function crmModal(html,wide){
+  document.getElementById("crmModalBox").className="modal"+(wide?" wide":"");
+  document.getElementById("crmModalBox").innerHTML=html;
+  document.getElementById("crmModal").classList.add("show");
+}
+function crmClose(){const m=document.getElementById("crmModal");if(m)m.classList.remove("show");}
+function mhead(title){return '<h2>'+title+'<button class="x" onclick="crmClose()">&times;</button></h2>';}
+function head(title,right){document.getElementById("crmMain").innerHTML='<div class="crm-head"><h2>'+title+'</h2>'+(right||"")+'</div><div id="crmBody"></div>';return document.getElementById("crmBody");}
+
+/* =========================== DASHBOARD =========================== */
+function vDash(){
+  const t=today(),m=monthKey(t);
+  const deals=Object.values(C.deals),jobs=Object.values(C.jobs),invs=Object.values(C.invs),quos=Object.values(C.quos);
+  const openDeals=deals.filter(dealOpen),pipeVal=openDeals.reduce((s,d)=>s+num(d.value),0);
+  const invMonth=invs.filter(d=>monthKey(d.date)===m).reduce((s,d)=>s+docGrand(d),0);
+  const quoMonth=quos.filter(d=>monthKey(d.date)===m);
+  let outstanding=0,overdue=0;invs.forEach(d=>{const i=invInfo(d);outstanding+=Math.max(i.bal,0);if(i.late)overdue+=i.bal;});
+  const inProd=jobs.filter(j=>j.stage!=="deliv"),late=jobs.filter(jobLate);
+  const dueActs=Object.values(C.acts).filter(x=>!x.done&&x.due&&x.due<=t).sort((x,y)=>x.due.localeCompare(y.due));
+  const b=head("Dashboard",'<button class="btn primary sm" onclick="dealForm()">+ New enquiry</button><button class="btn secondary sm" onclick="actForm()">+ Follow-up</button>');
+  let html='<div class="kpis">'+
+    kpi("Open pipeline",rm(pipeVal),openDeals.length+" open deals","pipe")+
+    kpi("Quotations this month",quoMonth.length,rm(quoMonth.reduce((s,d)=>s+docGrand(d),0)),"")+
+    kpi("Invoiced this month",rm(invMonth),MONTHS[new Date().getMonth()]+" "+new Date().getFullYear(),"",'good')+
+    kpi("Outstanding",rm(outstanding),overdue>0?rm(overdue)+" overdue":"Nothing overdue","pay",overdue>0?"warn":"")+
+    kpi("In production",inProd.length,late.length?late.length+" running late":"All on schedule","jobs",late.length?"warn":"")+
+    kpi("Follow-ups due",dueActs.length,"today & overdue","acts",dueActs.length?"warn":"")+
+    '</div><div class="grid2"><div>';
+  html+='<div class="card"><h3>Follow-ups due<button class="btn secondary sm" onclick="crmGo(\'acts\')">All</button></h3>'+(dueActs.length?dueActs.slice(0,8).map(actRow).join(""):'<div class="empty">Nothing due. Nice.</div>')+'</div>';
+  const soon=inProd.slice().sort((x,y)=>(x.due||"9").localeCompare(y.due||"9")).slice(0,8);
+  html+='<div class="card"><h3>Production due next<button class="btn secondary sm" onclick="crmGo(\'jobs\')">Board</button></h3>'+(soon.length?'<table class="tbl"><tr><th>Job</th><th>Customer</th><th>Stage</th><th class="r">Due</th></tr>'+soon.map(j=>'<tr class="click" onclick="jobForm(\''+a(j.id)+'\')"><td class="nw"><b>'+h(j.no)+'</b></td><td>'+h(cname(j.cust,j.custName))+'</td><td>'+h(stageName(JOB_STAGES,j.stage))+'<div class="prog"><i style="width:'+jobPct(j)+'%"></i></div></td><td class="r nw">'+(jobLate(j)?'<span class="pill red">'+dmy(j.due)+'</span>':dmy(j.due))+'</td></tr>').join("")+'</table>':'<div class="empty">No jobs in production.</div>')+'</div>';
+  html+='</div><div>';
+  const counts=DEAL_STAGES.filter(s=>s[0]!=="lost").map(s=>{const ds=deals.filter(d=>d.stage===s[0]);return [s[1],ds.length,ds.reduce((x,d)=>x+num(d.value),0)];});
+  const mx=Math.max(1,...counts.map(c=>c[2]));
+  html+='<div class="card"><h3>Pipeline by stage<button class="btn secondary sm" onclick="crmGo(\'pipe\')">Board</button></h3><div class="bars">'+counts.map(c=>'<div class="bar"><span class="n">'+h(c[0])+' ('+c[1]+')</span><span class="t"><span class="f" style="width:'+(c[2]/mx*100)+'%;display:block"></span></span><span class="x">'+rm(c[2])+'</span></div>').join("")+'</div></div>';
+  html+='<div class="card"><h3>Invoiced — last 6 months</h3>'+monthBars(6)+'</div>';
+  const od=invs.map(d=>[d,invInfo(d)]).filter(x=>x[1].late).sort((x,y)=>y[1].age-x[1].age).slice(0,6);
+  html+='<div class="card"><h3>Overdue invoices<button class="btn secondary sm" onclick="crmUI.payTab=\'overdue\';crmGo(\'pay\')">All</button></h3>'+(od.length?'<table class="tbl">'+od.map(x=>'<tr class="click" onclick="payForm(\''+a(x[0].no)+'\')"><td><b>'+h(x[0].no)+'</b><div class="sub" style="font-size:11px;color:var(--muted)">'+h(x[0].cust)+'</div></td><td class="r">'+rm(x[1].bal)+'</td><td class="r"><span class="pill red">'+x[1].age+'d late</span></td></tr>').join("")+'</table>':'<div class="empty">No overdue invoices.</div>')+'</div>';
+  html+='</div></div>';
+  b.innerHTML=html;
+}
+function kpi(l,v,s,go,cls){return '<div class="kpi '+(cls||"")+(go?' click" onclick="crmGo(\''+go+'\')"':'"')+'><div class="l">'+h(l)+'</div><div class="v">'+h(String(v))+'</div><div class="s">'+h(s)+'</div></div>';}
+function monthBars(n,year){
+  const now=new Date(),cols=[];
+  for(let i=n-1;i>=0;i--){
+    const d=year?new Date(year,11-i,1):new Date(now.getFullYear(),now.getMonth()-i,1);
+    const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    cols.push([MONTHS[d.getMonth()],Object.values(C.invs).filter(x=>monthKey(x.date)===k).reduce((s,x)=>s+docGrand(x),0)]);
+  }
+  const mx=Math.max(1,...cols.map(c=>c[1]));
+  return '<div class="vbars">'+cols.map(c=>'<div class="c"><div class="b" style="height:'+(c[1]/mx*100)+'%">'+(c[1]?'<span>'+(c[1]>=1000?(c[1]/1000).toFixed(1)+"k":Math.round(c[1]))+'</span>':'')+'</div><div class="lb">'+c[0]+'</div></div>').join("")+'</div>';
+}
+
+/* =========================== PIPELINE =========================== */
+function vPipe(){
+  const b=head("Sales Pipeline",'<input type="text" placeholder="Search deals…" value="'+a(crmUI.pipeQ)+'" oninput="crmUI.pipeQ=this.value;drawPipe()"><button class="btn primary sm" onclick="dealForm()">+ New enquiry</button>');
+  b.innerHTML='<div class="board" id="pipeBoard"></div><div class="hint">Drag a card to move it between stages. Click a card to edit it, create its quotation, or turn it into a production job.</div>';
+  drawPipe();
+}
+function drawPipe(){
+  const q=crmUI.pipeQ.toLowerCase(),t=today();
+  const deals=Object.values(C.deals).filter(d=>!q||[d.title,cname(d.cust,d.custName),d.product,d.ref].join(" ").toLowerCase().includes(q));
+  document.getElementById("pipeBoard").innerHTML=DEAL_STAGES.map(s=>{
+    const ds=deals.filter(d=>d.stage===s[0]).sort((x,y)=>(x.close||"9").localeCompare(y.close||"9"));
+    return '<div class="col" data-stage="'+s[0]+'" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="dropDeal(event,\''+s[0]+'\')">'+
+      '<div class="ch">'+h(s[1])+' <small>'+ds.length+' · '+rm(ds.reduce((x,d)=>x+num(d.value),0))+'</small></div>'+
+      ds.map(d=>'<div class="kc'+(dealOpen(d)&&d.close&&d.close<t?' late':d.hot?' hot':'')+'" draggable="true" ondragstart="event.dataTransfer.setData(\'text\',\''+a(d.id)+'\')" onclick="dealForm(\''+a(d.id)+'\')">'+
+        '<div class="t">'+h(d.title||d.product||"Untitled deal")+'</div><div>'+h(cname(d.cust,d.custName))+'</div>'+
+        '<div class="m"><span>'+(d.qty?h(d.qty)+' pcs':'')+(d.product&&d.title?' · '+h(d.product):'')+'</span><b>'+rm(d.value)+'</b></div>'+
+        '<div class="m"><span>'+h(d.ref||"")+(d.quoteNo?' · '+h(d.quoteNo):'')+'</span><span>'+(d.close?dmy(d.close):'')+'</span></div></div>').join("")+
+      '</div>';
+  }).join("");
+}
+async function dropDeal(ev,stage){
+  ev.preventDefault();document.querySelectorAll(".col.over").forEach(c=>c.classList.remove("over"));
+  const id=ev.dataTransfer.getData("text"),d=C.deals[id];if(!d||d.stage===stage)return;
+  await setDealStage(d,stage);
+  drawPipe();crmBadges();
+}
+async function setDealStage(d,stage){
+  if(stage==="lost"&&!d.lostReason){const r=prompt("Reason lost? (price, lead time, quality, no reply…)","");if(r!==null)d.lostReason=r;}
+  d.stage=stage;d.updated=today();
+  (d.log=d.log||[]).push({stage,date:today()});
+  await crmPut("deals",d.id,d);
+  if(stage==="won"&&!Object.values(C.jobs).some(j=>j.dealId===d.id)&&confirm("Deal won! Create a production job for it now?"))jobFromDeal(d.id);
+}
+function dealForm(id,preset){
+  const d=id?C.deals[id]:Object.assign({stage:"enq",source:"WhatsApp",product:"",deco:"None",sizes:{},close:addDays(today(),14)},preset||{});
+  crmModal(mhead(id?'Deal '+h(d.ref||""):'New enquiry')+
+    '<label>Deal title</label><input type="text" id="d_title" value="'+a(d.title)+'" placeholder="e.g. 200 staff polo tees with embroidered logo">'+
+    '<div class="row3"><div><label>Customer</label><select id="d_cust">'+custOpts(d.cust)+'</select></div><div><label>…or new customer name</label><input type="text" id="d_newcust" placeholder="Type to create"></div></div>'+
+    '<div class="row3"><div><label>New customer phone</label><input type="text" id="d_newtel" placeholder="Only for new customer"></div><div><label>Contact person</label><input type="text" id="d_contact" value="'+a(d.contact)+'"></div></div>'+
+    '<div class="row3"><div><label>Product</label><select id="d_product">'+opts(PRODUCTS,d.product,"— Product —")+'</select></div><div><label>Decoration</label><select id="d_deco">'+opts(DECOS,d.deco)+'</select></div><div><label>Fabric / colour</label><input type="text" id="d_fabric" value="'+a(d.fabric)+'" placeholder="e.g. Honeycomb 210gsm, navy"></div></div>'+
+    '<label>Size split</label>'+sizesInput("ds_",d.sizes)+
+    '<div class="row3"><div><label>Quantity (pcs)</label><input type="number" id="d_qty" value="'+a(d.qty)+'"></div><div><label>Estimated value (RM)</label><input type="number" step="0.01" id="d_value" value="'+a(d.value)+'"></div><div><label>Stage</label><select id="d_stage">'+opts(DEAL_STAGES,d.stage)+'</select></div></div>'+
+    '<div class="row3"><div><label>Expected close</label><input type="date" id="d_close" value="'+a(d.close)+'"></div><div><label>Delivery needed by</label><input type="date" id="d_deadline" value="'+a(d.deadline)+'"></div><div><label>Lead source</label><select id="d_source">'+opts(SOURCES,d.source)+'</select></div></div>'+
+    '<div class="row3"><div><label>Sales person</label><input type="text" id="d_owner" value="'+a(d.owner)+'"></div><div><label>Priority</label><select id="d_hot">'+opts([["","Normal"],["1","Hot / urgent"]],d.hot?"1":"")+'</select></div>'+(d.stage==="lost"?'<div><label>Lost reason</label><input type="text" id="d_lost" value="'+a(d.lostReason)+'"></div>':'<div></div>')+'</div>'+
+    '<label>Notes (brief: logo positions, compliance, delivery format…)</label><textarea id="d_notes" rows="3">'+h(d.notes)+'</textarea>'+
+    (d.log&&d.log.length?'<label>History</label><div class="loglist">'+d.log.slice().reverse().map(l=>dmy(l.date)+' — '+h(stageName(DEAL_STAGES,l.stage))).join("<br>")+'</div>':'')+
+    '<div class="actions" style="margin-top:14px;"><button class="btn primary" onclick="saveDeal(\''+a(id||"")+'\')">Save deal</button>'+
+    (id?'<button class="btn pink" onclick="saveDeal(\''+a(id)+'\',\'quote\')">Create quotation</button>'+
+       '<button class="btn secondary" onclick="saveDeal(\''+a(id)+'\',\'job\')">→ Production job</button>'+
+       '<button class="btn secondary" onclick="crmClose();actForm(null,{cust:\''+a(d.cust)+'\',deal:\''+a(id)+'\'})">+ Follow-up</button>'+
+       '<button class="btn secondary" style="color:var(--danger)" onclick="if(confirm(\'Delete this deal?\')){crmDel(\'deals\',\''+a(id)+'\').then(()=>{crmClose();crmRefresh();})}">Delete</button>':'')+
+    '</div>',true);
+}
+async function saveDeal(id,then){
+  let cust=fv("d_cust");const nc=fv("d_newcust").trim();
+  if(nc)cust=await ensureCustomer(nc,{tel:fv("d_newtel").trim(),attn:fv("d_contact").trim(),source:fv("d_source")});
+  if(!cust){alert("Pick a customer or type a new customer name.");return;}
+  const isNew=!id;
+  const d=isNew?{id:uid(),ref:"D-"+String(await nextSeq("meta:dealnext",1)).padStart(4,"0"),created:today(),log:[]}:C.deals[id];
+  const oldStage=d.stage;
+  Object.assign(d,{title:fv("d_title").trim(),cust,custName:cname(cust),contact:fv("d_contact").trim(),product:fv("d_product"),deco:fv("d_deco"),
+    fabric:fv("d_fabric").trim(),sizes:readSizes("ds_"),qty:parseInt(fv("d_qty"),10)||0,value:num(fv("d_value")),stage:fv("d_stage"),
+    close:fv("d_close"),deadline:fv("d_deadline"),source:fv("d_source"),owner:fv("d_owner").trim(),hot:!!fv("d_hot"),notes:fv("d_notes"),updated:today()});
+  if(document.getElementById("d_lost"))d.lostReason=fv("d_lost");
+  if(isNew||oldStage!==d.stage)d.log.push({stage:d.stage,date:today()});
+  if(!await crmPut("deals",d.id,d))return;
+  crmClose();
+  if(then==="quote")return quoteFromDeal(d.id);
+  if(then==="job")return jobFromDeal(d.id);
+  crmRefresh();
+  if(!isNew&&oldStage!=="won"&&d.stage==="won"&&!Object.values(C.jobs).some(j=>j.dealId===d.id)&&confirm("Deal won! Create a production job for it now?"))jobFromDeal(d.id);
+}
+function dealDesc(d){
+  const parts=[d.product,d.fabric,d.deco&&d.deco!=="None"?d.deco:""].filter(Boolean).join(" - ")||d.title||"Item";
+  const sz=sizeText(d.sizes);return parts+(sz?" ("+sz+")":"");
+}
+async function quoteFromDeal(id){
+  const d=C.deals[id],c=customers[d.cust]||{name:d.custName};
+  openDocs();await setMode("quotation");await newDoc();
+  const doc=collectDoc(),qty=d.qty||1;
+  Object.assign(doc,{cust:c.name,addr:c.addr||"",attn:d.contact||c.attn||"",tel:c.tel||"",po:d.ref,
+    items:[{desc:dealDesc(d),qty:qty,price:Math.round(num(d.value)/qty*100)/100,disc:0}]});
+  loadDoc(doc);
+  d.quoteNo=doc.no;if(["enq","brief","sample"].includes(d.stage)){d.stage="quoted";(d.log=d.log||[]).push({stage:"quoted",date:today()});}
+  await crmPut("deals",d.id,d);
+  status("Quotation "+doc.no+" filled in from deal "+d.ref+" — check the price, then Save quotation.");
+}
+
+/* =========================== PRODUCTION =========================== */
+function vJobs(){
+  const b=head("Production",'<input type="text" placeholder="Search jobs…" value="'+a(crmUI.jobQ)+'" oninput="crmUI.jobQ=this.value;drawJobs()">'+
+    '<label style="margin:0;display:flex;gap:5px;align-items:center;font-size:12.5px;color:var(--ink)"><input type="checkbox" '+(crmUI.jobsLate?'checked':'')+' onchange="crmUI.jobsLate=this.checked;drawJobs()"> Late only</label>'+
+    '<button class="btn primary sm" onclick="jobForm()">+ New job</button>');
+  b.innerHTML='<div class="board" id="jobBoard"></div><div class="hint">Drag cards as work moves through the factory. Red edge = past delivery date.</div>';
+  drawJobs();
+}
+function drawJobs(){
+  const q=crmUI.jobQ.toLowerCase();
+  const jobs=Object.values(C.jobs).filter(j=>(!q||[j.no,j.title,cname(j.cust,j.custName),j.product,j.ref].join(" ").toLowerCase().includes(q))&&(!crmUI.jobsLate||jobLate(j)));
+  document.getElementById("jobBoard").innerHTML=JOB_STAGES.map(s=>{
+    let js=jobs.filter(j=>j.stage===s[0]).sort((x,y)=>(x.due||"9").localeCompare(y.due||"9"));
+    const more=s[0]==="deliv"&&js.length>15?js.length-15:0;if(more)js=js.sort((x,y)=>(y.due||"").localeCompare(x.due||"")).slice(0,15);
+    return '<div class="col" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="dropJob(event,\''+s[0]+'\')">'+
+      '<div class="ch">'+h(s[1])+' <small>'+jobs.filter(j=>j.stage===s[0]).length+'</small></div>'+
+      js.map(j=>'<div class="kc'+(jobLate(j)?' late':j.priority==="Urgent"?' hot':'')+'" draggable="true" ondragstart="event.dataTransfer.setData(\'text\',\''+a(j.id)+'\')" onclick="jobForm(\''+a(j.id)+'\')">'+
+        '<div class="t">'+h(j.no)+(j.priority==="Urgent"?' <span class="pill pink">URGENT</span>':'')+'</div><div>'+h(cname(j.cust,j.custName))+'</div>'+
+        '<div class="m"><span>'+h(j.product||j.title||"")+'</span><b>'+(j.qty||0)+' pcs</b></div>'+
+        '<div class="m"><span>'+(j.art&&j.art!=="Approved"&&["conf","art"].includes(j.stage)?'<span class="pill amber">Artwork: '+h(j.art)+'</span>':h(j.ref||""))+'</span><span>'+(j.due?(jobLate(j)?'<b style="color:var(--danger)">'+dmy(j.due)+'</b>':dmy(j.due)):'')+'</span></div>'+
+        '<div class="prog"><i style="width:'+jobPct(j)+'%"></i></div></div>').join("")+
+      (more?'<div class="hint">+'+more+' older delivered jobs</div>':'')+'</div>';
+  }).join("");
+}
+async function dropJob(ev,stage){
+  ev.preventDefault();document.querySelectorAll(".col.over").forEach(c=>c.classList.remove("over"));
+  const j=C.jobs[ev.dataTransfer.getData("text")];if(!j||j.stage===stage)return;
+  j.stage=stage;(j.log=j.log||[]).push({stage,date:today()});
+  if(stage==="art")j.art="Approved";
+  await crmPut("jobs",j.id,j);drawJobs();crmBadges();
+}
+function jobForm(id,preset){
+  const j=id?C.jobs[id]:Object.assign({stage:"conf",priority:"Normal",art:"Pending",deco:"None",sizes:{},due:addDays(today(),21)},preset||{});
+  crmModal(mhead(id?'Job '+h(j.no):'New production job')+'<input type="hidden" id="j_deal" value="'+a(j.dealId)+'">'+
+    '<div class="row3"><div><label>Customer</label><select id="j_cust">'+custOpts(j.cust)+'</select></div><div><label>…or new customer name</label><input type="text" id="j_newcust"></div></div>'+
+    '<label>Job description</label><input type="text" id="j_title" value="'+a(j.title)+'" placeholder="e.g. Staff polo — embroidered left chest logo">'+
+    '<div class="row3"><div><label>Product</label><select id="j_product">'+opts(PRODUCTS,j.product,"— Product —")+'</select></div><div><label>Decoration</label><select id="j_deco">'+opts(DECOS,j.deco)+'</select></div><div><label>Fabric / colour</label><input type="text" id="j_fabric" value="'+a(j.fabric)+'"></div></div>'+
+    '<label>Size split</label>'+sizesInput("js_",j.sizes)+
+    '<div class="row3"><div><label>Total qty (pcs)</label><input type="number" id="j_qty" value="'+a(j.qty)+'"></div><div><label>Order value (RM)</label><input type="number" step="0.01" id="j_value" value="'+a(j.value)+'"></div><div><label>Deposit received (RM)</label><input type="number" step="0.01" id="j_deposit" value="'+a(j.deposit)+'"></div></div>'+
+    '<div class="row3"><div><label>Stage</label><select id="j_stage">'+opts(JOB_STAGES,j.stage)+'</select></div><div><label>Delivery date</label><input type="date" id="j_due" value="'+a(j.due)+'"></div><div><label>Priority</label><select id="j_priority">'+opts(["Normal","Urgent"],j.priority)+'</select></div></div>'+
+    '<div class="row3"><div><label>Artwork approval</label><select id="j_art">'+opts(ART,j.art)+'</select></div><div><label>Quotation / invoice ref</label><input type="text" id="j_ref" value="'+a(j.ref)+'" placeholder="e.g. QUO000004"></div><div><label>Assigned to / line</label><input type="text" id="j_line" value="'+a(j.line)+'"></div></div>'+
+    '<label>Production notes (logo position, labels, packing, delivery format)</label><textarea id="j_notes" rows="3">'+h(j.notes)+'</textarea>'+
+    (j.log&&j.log.length?'<label>Stage history</label><div class="loglist">'+j.log.slice().reverse().map(l=>dmy(l.date)+' — '+h(stageName(JOB_STAGES,l.stage))).join("<br>")+'</div>':'')+
+    '<div class="actions" style="margin-top:14px;"><button class="btn primary" onclick="saveJob(\''+a(id||"")+'\')">Save job</button>'+
+    (id?(j.stage!=="deliv"?'<button class="btn secondary" onclick="saveJob(\''+a(id)+'\',\'next\')">Next stage →</button>':'')+
+      '<button class="btn secondary" onclick="saveJob(\''+a(id)+'\',\'sheet\')">Print job sheet</button>'+
+      '<button class="btn pink" onclick="saveJob(\''+a(id)+'\',\'invoice\')">Create invoice</button>'+
+      '<button class="btn secondary" style="color:var(--danger)" onclick="if(confirm(\'Delete this job?\')){crmDel(\'jobs\',\''+a(id)+'\').then(()=>{crmClose();crmRefresh();})}">Delete</button>':'')+
+    '</div>',true);
+}
+async function saveJob(id,then){
+  let cust=fv("j_cust");const nc=fv("j_newcust").trim();
+  if(nc)cust=await ensureCustomer(nc);
+  if(!cust){alert("Pick a customer or type a new customer name.");return;}
+  const isNew=!id;
+  const j=isNew?{id:uid(),no:"JOB"+String(await nextSeq("meta:jobnext",1)).padStart(4,"0"),created:today(),log:[]}:C.jobs[id];
+  if(fv("j_deal"))j.dealId=fv("j_deal");
+  const old=j.stage;
+  Object.assign(j,{cust,custName:cname(cust),title:fv("j_title").trim(),product:fv("j_product"),deco:fv("j_deco"),fabric:fv("j_fabric").trim(),
+    sizes:readSizes("js_"),qty:parseInt(fv("j_qty"),10)||sizeTotal(readSizes("js_")),value:num(fv("j_value")),deposit:num(fv("j_deposit")),
+    stage:fv("j_stage"),due:fv("j_due"),priority:fv("j_priority"),art:fv("j_art"),ref:fv("j_ref").trim(),line:fv("j_line").trim(),notes:fv("j_notes")});
+  if(then==="next"){const i=JOB_STAGES.findIndex(s=>s[0]===j.stage);if(i<JOB_STAGES.length-1)j.stage=JOB_STAGES[i+1][0];if(j.stage==="art")j.art="Approved";}
+  if(isNew||old!==j.stage)j.log.push({stage:j.stage,date:today()});
+  if(!await crmPut("jobs",j.id,j))return;
+  if(then==="sheet")return jobSheet(j.id);
+  if(then==="invoice"){crmClose();return invoiceFromJob(j.id);}
+  if(then==="next")return jobForm(j.id);
+  crmClose();crmRefresh();
+}
+async function jobFromDeal(id){
+  const d=C.deals[id];
+  if(d.stage!=="won"){d.stage="won";(d.log=d.log||[]).push({stage:"won",date:today()});await crmPut("deals",d.id,d);}
+  jobForm(null,{dealId:d.id,cust:d.cust,title:d.title,product:d.product,deco:d.deco,fabric:d.fabric,sizes:Object.assign({},d.sizes),qty:d.qty,value:d.value,
+    due:d.deadline||addDays(today(),21),ref:d.quoteNo||d.ref,notes:d.notes,priority:d.hot?"Urgent":"Normal"});
+}
+async function invoiceFromJob(id){
+  const j=C.jobs[id];
+  const q=j.ref&&C.quos[j.ref]?C.quos[j.ref]:null;
+  openDocs();
+  if(q){await setMode("quotation");loadDoc(q);await convertToInvoice();}
+  else{
+    await setMode("invoice");await newDoc();
+    const c=customers[j.cust]||{name:j.custName},doc=collectDoc(),qty=j.qty||1;
+    Object.assign(doc,{cust:c.name,addr:c.addr||"",attn:c.attn||"",tel:c.tel||"",po:j.ref||j.no,
+      items:[{desc:dealDesc(j),qty:qty,price:Math.round(num(j.value)/qty*100)/100,disc:0}]});
+    loadDoc(doc);
+  }
+  if(j.deposit){setVal("f_dep",j.deposit);renderInvoice();}
+  status("Invoice "+val("f_no")+" filled in from "+j.no+" — check it, then Save invoice.");
+}
+function jobSheet(id){
+  const j=C.jobs[id],c=customers[j.cust]||{name:j.custName};
+  const w=window.open("","_blank");if(!w){alert("Allow pop-ups to print the job sheet.");return;}
+  const row=(l,v)=>'<tr><th>'+l+'</th><td>'+h(v||"—")+'</td></tr>';
+  w.document.write('<!DOCTYPE html><html><head><title>'+h(j.no+" - "+c.name)+'</title><style>body{font-family:Arial,sans-serif;margin:14mm;color:#000}h1{margin:0;font-size:22px}table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid #000;padding:6px 8px;text-align:left;font-size:13px}th{width:34%;background:#f2f2f2}.sz th,.sz td{text-align:center;width:auto}.chk td{height:28px}@page{size:A4;margin:0}</style></head><body>'+
+    '<h1>PRODUCTION JOB SHEET — '+h(j.no)+'</h1><div style="font-size:13px;margin-top:4px">'+h(val("co_name"))+' · Printed '+dmy(today())+(j.priority==="Urgent"?' · <b>URGENT</b>':'')+'</div>'+
+    '<table>'+row("Customer",c.name)+row("Job",j.title)+row("Product",j.product)+row("Fabric / colour",j.fabric)+row("Decoration",j.deco)+row("Artwork",j.art)+row("Total quantity",(j.qty||0)+" pcs")+row("Delivery date",dmy(j.due))+row("Ref.",j.ref)+row("Line / assigned",j.line)+'</table>'+
+    '<table class="sz"><tr>'+SIZES.map(s=>'<th>'+s+'</th>').join("")+'<th>Total</th></tr><tr>'+SIZES.map(s=>'<td>'+((j.sizes||{})[s]||"")+'</td>').join("")+'<td><b>'+(j.qty||0)+'</b></td></tr></table>'+
+    '<table><tr><th>Notes</th><td style="white-space:pre-line;height:70px;vertical-align:top">'+h(j.notes)+'</td></tr></table>'+
+    '<table class="chk"><tr><th>Stage</th><td><b>Done by</b></td><td><b>Date</b></td><td><b>Qty OK</b></td></tr>'+JOB_STAGES.slice(1).map(s=>'<tr><th>'+s[1]+'</th><td></td><td></td><td></td></tr>').join("")+'</table>'+
+    '<script>window.onload=function(){window.print();}<\/script></body></html>');
+  w.document.close();
+}
+
+/* =========================== CUSTOMERS =========================== */
+function custStats(k){
+  const name=cname(k);
+  const invs=Object.values(C.invs).filter(d=>ckey(d.cust)===k),quos=Object.values(C.quos).filter(d=>ckey(d.cust)===k);
+  const deals=Object.values(C.deals).filter(d=>d.cust===k),jobs=Object.values(C.jobs).filter(j=>j.cust===k),acts=Object.values(C.acts).filter(x=>x.cust===k);
+  let invoiced=0,outstanding=0;invs.forEach(d=>{const i=invInfo(d);invoiced+=docGrand(d);outstanding+=Math.max(i.bal,0);});
+  const dates=[...invs.map(d=>d.date),...quos.map(d=>d.date),...acts.filter(x=>x.done).map(x=>x.doneAt||x.due),...deals.map(d=>d.updated)].filter(Boolean).sort();
+  return {name,invs,quos,deals,jobs,acts,invoiced,outstanding,quoted:quos.reduce((s,d)=>s+docGrand(d),0),open:deals.filter(dealOpen).length,last:dates[dates.length-1]||""};
+}
+function vCust(){
+  const b=head("Customers",'<input type="text" placeholder="Search name or phone…" value="'+a(crmUI.custQ)+'" oninput="crmUI.custQ=this.value;drawCust()">'+
+    '<select onchange="crmUI.custSeg=this.value;drawCust()">'+opts(SEGMENTS,crmUI.custSeg,"All segments")+'</select>'+
+    '<button class="btn secondary sm" onclick="custCsv()">Export CSV</button><button class="btn primary sm" onclick="custForm()">+ New customer</button>');
+  b.innerHTML='<div class="card" style="padding:4px 8px;overflow-x:auto"><table class="tbl" id="custTbl"></table></div>';
+  drawCust();
+}
+function drawCust(){
+  const q=crmUI.custQ.toLowerCase();
+  const rows=Object.keys(customers).filter(k=>{const c=customers[k];return (!q||(c.name+" "+(c.tel||"")+" "+(c.email||"")).toLowerCase().includes(q))&&(!crmUI.custSeg||c.segment===crmUI.custSeg);})
+    .map(k=>[k,custStats(k)]).sort((x,y)=>y[1].invoiced-x[1].invoiced||x[1].name.localeCompare(y[1].name));
+  document.getElementById("custTbl").innerHTML='<tr><th>Customer</th><th>Segment</th><th>Phone</th><th class="r">Open deals</th><th class="r">Quoted</th><th class="r">Invoiced</th><th class="r">Outstanding</th><th>Last activity</th></tr>'+
+    (rows.length?rows.map(([k,s])=>{const c=customers[k];return '<tr class="click" onclick="custDetail(\''+a(k)+'\')"><td><b>'+h(c.name)+'</b>'+(c.attn?'<div style="font-size:11px;color:var(--muted)">'+h(c.attn)+'</div>':'')+'</td><td>'+(c.segment?'<span class="pill">'+h(c.segment)+'</span>':'')+'</td><td class="nw">'+h(c.tel||"")+' '+waLink(c.tel,"WA")+'</td><td class="r">'+(s.open||"")+'</td><td class="r">'+(s.quoted?fmt(s.quoted):"")+'</td><td class="r">'+(s.invoiced?fmt(s.invoiced):"")+'</td><td class="r">'+(s.outstanding>0.004?'<b style="color:var(--danger)">'+fmt(s.outstanding)+'</b>':"")+'</td><td class="nw">'+dmy(s.last)+'</td></tr>';}).join("")
+    :'<tr><td colspan="8" class="empty">No customers match.</td></tr>');
+}
+function custForm(k){
+  const c=k?customers[k]:{};
+  crmModal(mhead(k?'Edit '+h(c.name):'New customer')+
+    '<label>Customer / company name</label><input type="text" id="c2_name" value="'+a(c.name)+'"'+(k?' readonly style="background:#f5f7f9"':'')+'>'+
+    '<div class="row3"><div><label>Segment</label><select id="c2_seg">'+opts(SEGMENTS,c.segment,"—")+'</select></div><div><label>Industry</label><input type="text" id="c2_ind" value="'+a(c.industry)+'" placeholder="e.g. Logistics, F&amp;B"></div><div><label>Lead source</label><select id="c2_src">'+opts(SOURCES,c.source,"—")+'</select></div></div>'+
+    '<div class="row3"><div><label>Contact person</label><input type="text" id="c2_attn" value="'+a(c.attn)+'"></div><div><label>Phone</label><input type="text" id="c2_tel" value="'+a(c.tel)+'"></div><div><label>Email</label><input type="text" id="c2_email" value="'+a(c.email)+'"></div></div>'+
+    '<label>Address (one line per row)</label><textarea id="c2_addr" rows="3">'+h(c.addr)+'</textarea>'+
+    '<label>Notes (preferences, sizing habits, payment behaviour)</label><textarea id="c2_notes" rows="3">'+h(c.notes)+'</textarea>'+
+    '<div class="actions" style="margin-top:14px;"><button class="btn primary" onclick="saveCust(\''+a(k||"")+'\')">Save customer</button></div>');
+}
+async function saveCust(k){
+  const name=fv("c2_name").trim();if(!name){alert("Enter a name.");return;}
+  const key=k||ckey(name);
+  const c=Object.assign({},customers[key]||{},{name,segment:fv("c2_seg"),industry:fv("c2_ind").trim(),source:fv("c2_src"),attn:fv("c2_attn").trim(),
+    tel:fv("c2_tel").trim(),email:fv("c2_email").trim(),addr:fv("c2_addr"),notes:fv("c2_notes")});
+  customers[key]=c;
+  try{await window.storage.set(key,JSON.stringify(c));}catch(e){alert("Could not save.");return;}
+  renderCustomerAdminList();renderCustomerPicker();
+  if(k)custDetail(key);else{crmClose();crmRefresh();}
+}
+function custDetail(k){
+  const c=customers[k];if(!c)return;const s=custStats(k);
+  const sizeHist={};s.jobs.forEach(j=>SIZES.forEach(z=>{const v=parseInt((j.sizes||{})[z],10);if(v)sizeHist[z]=(sizeHist[z]||0)+v;}));
+  const lastJob=s.jobs.slice().sort((x,y)=>(y.created||"").localeCompare(x.created||""))[0];
+  const tbl=(cols,rows,empty)=>rows.length?'<table class="tbl"><tr>'+cols.map(c=>'<th'+(c.startsWith(">")?' class="r"':'')+'>'+c.replace(">","")+'</th>').join("")+'</tr>'+rows.join("")+'</table>':'<div class="empty">'+empty+'</div>';
+  crmModal(mhead(h(c.name)+(c.segment?' <span class="pill">'+h(c.segment)+'</span>':''))+
+    '<div style="font-size:12.5px;color:var(--muted);margin:-6px 0 12px;line-height:1.6">'+[c.attn,c.tel,c.email].filter(Boolean).map(h).join(" · ")+' '+waLink(c.tel)+(c.addr?'<br>'+h(c.addr).replace(/\n/g,", "):'')+(c.notes?'<br><i>'+h(c.notes)+'</i>':'')+'</div>'+
+    '<div class="actions" style="margin-bottom:14px"><button class="btn primary sm" onclick="crmClose();dealForm(null,{cust:\''+a(k)+'\'})">+ New deal</button>'+
+      '<button class="btn pink sm" onclick="newQuoteFor(\''+a(k)+'\')">+ New quotation</button>'+
+      '<button class="btn secondary sm" onclick="crmClose();actForm(null,{cust:\''+a(k)+'\'})">+ Follow-up</button>'+
+      (lastJob?'<button class="btn secondary sm" onclick="reorder(\''+a(lastJob.id)+'\')">↻ Reorder last job</button>':'')+
+      '<button class="btn secondary sm" onclick="custForm(\''+a(k)+'\')">Edit details</button></div>'+
+    '<div class="kpis">'+kpi("Lifetime invoiced",rm(s.invoiced),s.invs.length+" invoices")+kpi("Outstanding",rm(s.outstanding),"",null,s.outstanding>0.004?"warn":"")+kpi("Quoted",rm(s.quoted),s.quos.length+" quotations")+kpi("Open deals",s.open,s.jobs.length+" production jobs")+'</div>'+
+    '<div class="grid2"><div>'+
+      '<div class="card"><h3>Deals</h3>'+tbl(["Deal","Stage",">Value"],s.deals.map(d=>'<tr class="click" onclick="dealForm(\''+a(d.id)+'\')"><td><b>'+h(d.ref)+'</b> '+h(d.title||d.product||"")+'</td><td>'+h(stageName(DEAL_STAGES,d.stage))+'</td><td class="r">'+fmt(num(d.value))+'</td></tr>'),"No deals yet.")+'</div>'+
+      '<div class="card"><h3>Quotations</h3>'+tbl(["No.","Date",">Total"],s.quos.sort((x,y)=>(y.date||"").localeCompare(x.date||"")).map(d=>'<tr class="click" onclick="crmOpenDoc(\'quotation\',\''+a(d.no)+'\')"><td><b>'+h(d.no)+'</b></td><td>'+dmy(d.date)+'</td><td class="r">'+fmt(docGrand(d))+'</td></tr>'),"No quotations yet.")+'</div>'+
+      '<div class="card"><h3>Size history (all jobs)</h3>'+(Object.keys(sizeHist).length?'<div class="chips">'+SIZES.filter(z=>sizeHist[z]).map(z=>'<span class="pill blue">'+z+': '+sizeHist[z]+'</span>').join("")+'</div>':'<div class="empty">Appears once production jobs have a size split.</div>')+'</div>'+
+    '</div><div>'+
+      '<div class="card"><h3>Invoices</h3>'+tbl(["No.","Date",">Total","Status"],s.invs.sort((x,y)=>(y.date||"").localeCompare(x.date||"")).map(d=>{const i=invInfo(d);return '<tr class="click" onclick="payForm(\''+a(d.no)+'\')"><td><b>'+h(d.no)+'</b></td><td>'+dmy(d.date)+'</td><td class="r">'+fmt(i.total)+'</td><td>'+statusPill(i.status)+'</td></tr>';}),"No invoices yet.")+'</div>'+
+      '<div class="card"><h3>Production jobs</h3>'+tbl(["Job","Stage",">Qty"],s.jobs.map(j=>'<tr class="click" onclick="jobForm(\''+a(j.id)+'\')"><td><b>'+h(j.no)+'</b> '+h(j.product||"")+'</td><td>'+h(stageName(JOB_STAGES,j.stage))+'</td><td class="r">'+(j.qty||0)+'</td></tr>'),"No jobs yet.")+'</div>'+
+      '<div class="card"><h3>Activity</h3>'+(s.acts.length?s.acts.sort((x,y)=>(y.due||"").localeCompare(x.due||"")).slice(0,10).map(actRow).join(""):'<div class="empty">No follow-ups logged.</div>')+'</div>'+
+    '</div></div>',true);
+}
+async function crmOpenDoc(type,no){openDocs();await setMode(type);await openDoc(no);}
+async function newQuoteFor(k){
+  const c=customers[k];openDocs();await setMode("quotation");await newDoc();
+  const doc=collectDoc();Object.assign(doc,{cust:c.name,addr:c.addr||"",attn:c.attn||"",tel:c.tel||""});loadDoc(doc);
+  status("New quotation for "+c.name+".");
+}
+function reorder(jobId){
+  const j=C.jobs[jobId];crmClose();
+  jobForm(null,{cust:j.cust,title:j.title,product:j.product,deco:j.deco,fabric:j.fabric,sizes:Object.assign({},j.sizes),qty:j.qty,value:j.value,notes:j.notes,ref:"Reorder of "+j.no});
+}
+function custCsv(){
+  const esc=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const lines=[["Name","Segment","Industry","Contact","Phone","Email","Address","Source","Invoiced","Outstanding","Open deals","Last activity"].map(esc).join(",")];
+  Object.keys(customers).forEach(k=>{const c=customers[k],s=custStats(k);lines.push([c.name,c.segment,c.industry,c.attn,c.tel,c.email,(c.addr||"").replace(/\n/g,", "),c.source,s.invoiced.toFixed(2),s.outstanding.toFixed(2),s.open,s.last].map(esc).join(","));});
+  const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv"});
+  const l=document.createElement("a");l.href=URL.createObjectURL(blob);l.download="customers-"+today()+".csv";document.body.appendChild(l);l.click();l.remove();
+}
+
+/* =========================== FOLLOW-UPS =========================== */
+function actRow(x){
+  const t=today(),late=!x.done&&x.due&&x.due<t,c=customers[x.cust];
+  return '<div class="act'+(x.done?' done':'')+'"><input type="checkbox" '+(x.done?'checked':'')+' onchange="toggleAct(\''+a(x.id)+'\',this.checked)">'+
+    '<div class="bd" style="cursor:pointer" onclick="actForm(\''+a(x.id)+'\')"><b>'+h(x.type)+': '+h(x.subject||"")+'</b><div class="s">'+h(c?c.name:"")+(x.deal&&C.deals[x.deal]?' · '+h(C.deals[x.deal].ref):'')+(x.notes?' · '+h(x.notes.slice(0,80)):'')+'</div></div>'+
+    '<div style="text-align:right;flex:none">'+(x.due?(late?'<span class="pill red">'+dmy(x.due)+'</span>':x.due===t?'<span class="pill amber">Today</span>':'<span class="pill">'+dmy(x.due)+'</span>'):'')+'<div style="margin-top:3px">'+(c&&!x.done?waLink(c.tel):'')+'</div></div></div>';
+}
+function vActs(){
+  const b=head("Follow-ups",'<div class="seg"><button class="'+(crmUI.actsTab==="open"?'on':'')+'" onclick="crmUI.actsTab=\'open\';vActs()">To do</button><button class="'+(crmUI.actsTab==="done"?'on':'')+'" onclick="crmUI.actsTab=\'done\';vActs()">Done</button></div><button class="btn primary sm" onclick="actForm()">+ New follow-up</button>');
+  const t=today(),all=Object.values(C.acts);
+  if(crmUI.actsTab==="done"){
+    const d=all.filter(x=>x.done).sort((x,y)=>(y.doneAt||"").localeCompare(x.doneAt||"")).slice(0,60);
+    b.innerHTML='<div class="card">'+(d.length?d.map(actRow).join(""):'<div class="empty">Nothing completed yet.</div>')+'</div>';return;
+  }
+  const open=all.filter(x=>!x.done).sort((x,y)=>(x.due||"9").localeCompare(y.due||"9"));
+  const grp=(title,list,cls)=>'<div class="card"><h3>'+title+' <span class="pill '+cls+'">'+list.length+'</span></h3>'+(list.length?list.map(actRow).join(""):'<div class="empty">None.</div>')+'</div>';
+  b.innerHTML=grp("Overdue",open.filter(x=>x.due&&x.due<t),"red")+grp("Today",open.filter(x=>x.due===t),"amber")+grp("Upcoming",open.filter(x=>!x.due||x.due>t),"");
+}
+function actForm(id,preset){
+  const x=id?C.acts[id]:Object.assign({type:"Follow-up",due:today()},preset||{});
+  const deals=Object.values(C.deals).filter(d=>dealOpen(d)||d.id===x.deal);
+  crmModal(mhead(id?'Edit follow-up':'New follow-up')+
+    '<div class="row3"><div><label>Type</label><select id="a_type">'+opts(ACT_TYPES,x.type)+'</select></div><div><label>Due date</label><input type="date" id="a_due" value="'+a(x.due)+'"></div></div>'+
+    '<label>Subject</label><input type="text" id="a_subject" value="'+a(x.subject)+'" placeholder="e.g. Chase artwork approval, send fabric swatches">'+
+    '<div class="row3"><div><label>Customer</label><select id="a_cust">'+custOpts(x.cust)+'</select></div><div><label>Deal (optional)</label><select id="a_deal"><option value="">—</option>'+deals.map(d=>'<option value="'+a(d.id)+'"'+(d.id===x.deal?' selected':'')+'>'+h(d.ref+" "+(d.title||cname(d.cust)))+'</option>').join("")+'</select></div></div>'+
+    '<label>Notes / outcome</label><textarea id="a_notes" rows="3">'+h(x.notes)+'</textarea>'+
+    '<label style="display:flex;gap:6px;align-items:center;color:var(--ink)"><input type="checkbox" id="a_done" '+(x.done?'checked':'')+' style="width:auto"> Done</label>'+
+    '<div class="actions" style="margin-top:14px;"><button class="btn primary" onclick="saveAct(\''+a(id||"")+'\')">Save</button>'+
+    (id?'<button class="btn secondary" style="color:var(--danger)" onclick="crmDel(\'acts\',\''+a(id)+'\').then(()=>{crmClose();crmRefresh();})">Delete</button>':'')+'</div>');
+}
+async function saveAct(id){
+  const x=id?C.acts[id]:{id:uid(),created:today()};
+  const wasDone=!!x.done;
+  Object.assign(x,{type:fv("a_type"),due:fv("a_due"),subject:fv("a_subject").trim(),cust:fv("a_cust"),deal:fv("a_deal"),notes:fv("a_notes"),done:document.getElementById("a_done").checked});
+  if(x.done&&!wasDone)x.doneAt=today();
+  if(await crmPut("acts",x.id,x)){crmClose();crmRefresh();}
+}
+async function toggleAct(id,done){const x=C.acts[id];x.done=done;x.doneAt=done?today():"";await crmPut("acts",id,x);crmRefresh();}
+
+/* =========================== PAYMENTS =========================== */
+function vPay(){
+  const tabs=[["unpaid","Unpaid"],["overdue","Overdue"],["paid","Paid"],["all","All"]];
+  const b=head("Payments & receivables",'<div class="seg">'+tabs.map(t=>'<button class="'+(crmUI.payTab===t[0]?'on':'')+'" onclick="crmUI.payTab=\''+t[0]+'\';vPay()">'+t[1]+'</button>').join("")+'</div>');
+  const list=Object.values(C.invs).map(d=>[d,invInfo(d)]);
+  const ag=[0,0,0,0,0];list.forEach(([d,i])=>{if(i.bal<=0.004)return;const n=i.age;ag[n===0?0:n<=30?1:n<=60?2:n<=90?3:4]+=i.bal;});
+  const f=list.filter(([d,i])=>crmUI.payTab==="all"||(crmUI.payTab==="paid"?i.status==="Paid":crmUI.payTab==="overdue"?i.late:i.bal>0.004))
+    .sort((x,y)=>(y[0].date||"").localeCompare(x[0].date||""));
+  b.innerHTML='<div class="kpis">'+kpi("Not yet due",rm(ag[0]),"")+kpi("1–30 days late",rm(ag[1]),"",null,ag[1]?"warn":"")+kpi("31–60 days",rm(ag[2]),"",null,ag[2]?"warn":"")+kpi("61–90 days",rm(ag[3]),"",null,ag[3]?"warn":"")+kpi("Over 90 days",rm(ag[4]),"",null,ag[4]?"warn":"")+'</div>'+
+    '<div class="card" style="padding:4px 8px;overflow-x:auto"><table class="tbl"><tr><th>Invoice</th><th>Date</th><th>Customer</th><th class="r">Amount due</th><th class="r">Paid</th><th class="r">Balance</th><th>Due</th><th>Status</th><th></th></tr>'+
+    (f.length?f.map(([d,i])=>'<tr class="click" onclick="payForm(\''+a(d.no)+'\')"><td><b>'+h(d.no)+'</b></td><td class="nw">'+dmy(d.date)+'</td><td>'+h(d.cust)+'</td><td class="r">'+fmt(i.total)+'</td><td class="r">'+fmt(i.paid)+'</td><td class="r"><b>'+fmt(Math.max(i.bal,0))+'</b></td><td class="nw">'+dmy(i.due)+(i.late?' <span class="pill red">'+i.age+'d</span>':'')+'</td><td>'+statusPill(i.status)+'</td><td class="nw">'+(i.bal>0.004?'<button class="btn primary sm" onclick="event.stopPropagation();payForm(\''+a(d.no)+'\')">Record payment</button>':'')+'</td></tr>').join("")
+      :'<tr><td colspan="9" class="empty">No invoices here. Saved invoices appear automatically.</td></tr>')+'</table></div>'+
+    '<div class="hint">Due date = invoice date + terms (C.O.D. = due on the invoice date). Amount due = invoice grand total (deposit already deducted). Sales figures count the full order value.</div>';
+}
+function payForm(no){
+  const d=C.invs[no];if(!d)return;const i=invInfo(d),pays=C.pays[no]||[];
+  crmModal(mhead('Invoice '+h(no)+' '+statusPill(i.status))+
+    '<div class="kpis">'+kpi("Amount due",rm(i.total),num(d.dep)?"after "+rm(d.dep)+" deposit":d.cust)+kpi("Paid",rm(i.paid),pays.length+" payments")+kpi("Balance",rm(Math.max(i.bal,0)),"Due "+dmy(i.due),null,i.late?"warn":"")+'</div>'+
+    (pays.length?'<table class="tbl"><tr><th>Date</th><th>Method</th><th>Ref.</th><th class="r">Amount</th><th></th></tr>'+pays.map((p,ix)=>'<tr><td>'+dmy(p.date)+'</td><td>'+h(p.method)+'</td><td>'+h(p.ref)+'</td><td class="r">'+fmt(num(p.amount))+'</td><td class="r"><button class="mini del" onclick="delPay(\''+a(no)+'\','+ix+')">Remove</button></td></tr>').join("")+'</table>':'')+
+    (i.bal>0.004?'<fieldset style="margin-top:12px"><legend>Record payment</legend><div class="row3"><div><label>Amount (RM)</label><input type="number" step="0.01" id="p_amt" value="'+i.bal.toFixed(2)+'"></div><div><label>Date</label><input type="date" id="p_date" value="'+today()+'"></div><div><label>Method</label><select id="p_method">'+opts(PAY_METHODS,"Bank transfer")+'</select></div></div><label>Reference (bank ref / cheque no.)</label><input type="text" id="p_ref">'+
+      '<div class="actions" style="margin-top:10px"><button class="btn primary" onclick="savePay(\''+a(no)+'\')">Save payment</button></div></fieldset>':'')+
+    '<div class="actions" style="margin-top:12px"><button class="btn secondary" onclick="crmOpenDoc(\'invoice\',\''+a(no)+'\')">Open invoice</button>'+(customers[ckey(d.cust)]?'<button class="btn secondary" onclick="custDetail(\''+a(ckey(d.cust))+'\')">Customer</button>':'')+(i.bal>0.004&&d.tel?'<a class="btn secondary" style="text-decoration:none;color:#128c4b" target="_blank" rel="noopener" href="https://wa.me/'+(String(d.tel).replace(/\D/g,"").replace(/^0/,"60"))+'?text='+encodeURIComponent("Hi "+(d.attn||d.cust)+", a friendly reminder that invoice "+no+" ("+rm(i.bal)+") was due on "+dmy(i.due)+". Thank you!")+'">WhatsApp reminder</a>':'')+'</div>');
+}
+async function savePay(no){
+  const amt=num(fv("p_amt"));if(amt<=0){alert("Enter an amount.");return;}
+  const list=(C.pays[no]||[]).concat([{amount:amt,date:fv("p_date")||today(),method:fv("p_method"),ref:fv("p_ref").trim()}]);
+  if(await crmPut("pays",no,list)){payForm(no);crmBadges();if(crmView==="pay"||crmView==="dash")crmRefresh();}
+}
+async function delPay(no,ix){if(!confirm("Remove this payment?"))return;const list=(C.pays[no]||[]).slice();list.splice(ix,1);await crmPut("pays",no,list);payForm(no);crmRefresh();}
+
+/* =========================== REPORTS =========================== */
+function vRep(){
+  const years=[...new Set([new Date().getFullYear(),...Object.values(C.invs).map(d=>parseInt((d.date||"").slice(0,4),10)).filter(Boolean)])].sort((x,y)=>y-x);
+  const y=crmUI.repYear,inY=d=>(d.date||"").startsWith(String(y));
+  const b=head("Reports",'<select onchange="crmUI.repYear=+this.value;vRep()">'+years.map(v=>'<option'+(v===y?' selected':'')+'>'+v+'</option>').join("")+'</select>');
+  const invs=Object.values(C.invs).filter(inY),quos=Object.values(C.quos).filter(inY);
+  const deals=Object.values(C.deals).filter(d=>(d.created||"").startsWith(String(y)));
+  const sales=invs.reduce((s,d)=>s+docGrand(d),0),quoted=quos.reduce((s,d)=>s+docGrand(d),0);
+  const converted=quos.filter(q=>Object.values(C.invs).some(i=>i.po===q.no||(q.po&&i.po===q.po))).length;
+  const won=deals.filter(d=>d.stage==="won"),lost=deals.filter(d=>d.stage==="lost");
+  const winRate=won.length+lost.length?Math.round(won.length/(won.length+lost.length)*100):0;
+  const bars=(rows,money)=>{const mx=Math.max(1,...rows.map(r=>r[1]));return rows.length?'<div class="bars">'+rows.map(r=>'<div class="bar"><span class="n" title="'+a(r[0])+'">'+h(r[0])+'</span><span class="t"><span class="f" style="width:'+(r[1]/mx*100)+'%;display:block"></span></span><span class="x">'+(money?rm(r[1]):r[1])+'</span></div>').join("")+'</div>':'<div class="empty">No data yet.</div>';};
+  const byCust={};invs.forEach(d=>{byCust[d.cust]=(byCust[d.cust]||0)+docGrand(d);});
+  const bySrc={};deals.forEach(d=>{const k=d.source||"Other";bySrc[k]=bySrc[k]||[0,0,0];bySrc[k][0]++;if(d.stage==="won"){bySrc[k][1]++;bySrc[k][2]+=num(d.value);}});
+  const byProd={};[...Object.values(C.jobs).filter(j=>(j.created||"").startsWith(String(y)))].forEach(j=>{const k=j.product||"Other";byProd[k]=(byProd[k]||0)+(j.qty||0);});
+  const reasons={};lost.forEach(d=>{const r=(d.lostReason||"Not given").trim()||"Not given";reasons[r]=(reasons[r]||0)+1;});
+  const jobsDone=Object.values(C.jobs).filter(j=>j.stage==="deliv"&&(j.created||"").startsWith(String(y)));
+  const onTime=jobsDone.filter(j=>{const l=(j.log||[]).find(x=>x.stage==="deliv");return !j.due||!l||l.date<=j.due;}).length;
+  b.innerHTML='<div class="kpis">'+kpi("Sales invoiced",rm(sales),invs.length+" invoices",null,"good")+kpi("Quoted",rm(quoted),quos.length+" quotations")+
+    kpi("Quote → invoice",quos.length?Math.round(converted/quos.length*100)+"%":"—",converted+" converted")+kpi("Deal win rate",won.length+lost.length?winRate+"%":"—",won.length+" won · "+lost.length+" lost")+
+    kpi("Avg. invoice",rm(invs.length?sales/invs.length:0),"")+kpi("On-time delivery",jobsDone.length?Math.round(onTime/jobsDone.length*100)+"%":"—",jobsDone.length+" jobs delivered")+'</div>'+
+    '<div class="card"><h3>Sales by month — '+y+'</h3>'+monthBars(12,y)+'</div>'+
+    '<div class="grid2"><div class="card"><h3>Top customers</h3>'+bars(Object.entries(byCust).sort((p,q)=>q[1]-p[1]).slice(0,10),true)+'</div>'+
+    '<div class="card"><h3>Lead sources</h3>'+(Object.keys(bySrc).length?'<table class="tbl"><tr><th>Source</th><th class="r">Enquiries</th><th class="r">Won</th><th class="r">Won value</th></tr>'+Object.entries(bySrc).sort((p,q)=>q[1][0]-p[1][0]).map(([k,v])=>'<tr><td>'+h(k)+'</td><td class="r">'+v[0]+'</td><td class="r">'+v[1]+'</td><td class="r">'+fmt(v[2])+'</td></tr>').join("")+'</table>':'<div class="empty">No deals yet.</div>')+'</div>'+
+    '<div class="card"><h3>Pieces produced by product</h3>'+bars(Object.entries(byProd).sort((p,q)=>q[1]-p[1]),false)+'</div>'+
+    '<div class="card"><h3>Why deals were lost</h3>'+bars(Object.entries(reasons).sort((p,q)=>q[1]-p[1]),false)+'</div></div>';
+}
 </script>
 </body>
 </html>
