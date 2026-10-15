@@ -9,7 +9,7 @@ A single-file invoicing & quotation app for Kah Global Sdn Bhd. No server, no da
 - Auto-incrementing invoice numbers (INV000073, INV000074, ...)
 - Saved invoice history — reopen and reprint any past invoice
 - Automatic "Ringgit Malaysia amount in words" line
-- **Quotations** — separate Quotation tab with its own numbering (QUO000001, ...), "Valid until" date, terms & conditions box, saved quotation history, and one-click **Convert to invoice**
+- **Quotations** — separate Quotation tab with its own numbering (QUO000001, ...), "Valid until" date, terms & conditions box, saved quotation history, and one-click **Convert to invoice**, and up to 2 photos per quoted item
 
 ## How to use
 Open `index.html` in any browser (Chrome recommended). That's it.
